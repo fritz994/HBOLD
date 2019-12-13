@@ -1,0 +1,6 @@
+5de7d97b49a1e208a7bc9b1d
+SELECT ?s ?p ?o    WHERE {?s ?p ?o} LIMIT 1
+-----
+http://aemet.linkeddata.es/sparql e' un endpoint valido, 
+ma e' gia' presente in MongoDB; non lo aggiungo.
+L'estrazione viene evitata in quanto sarebbe inutile.

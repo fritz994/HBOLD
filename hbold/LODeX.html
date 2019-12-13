@@ -1,0 +1,242 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Fogli di stile -->
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css"/>
+	<link rel="stylesheet" type="text/css" href="css/hbold.css"/>
+    <link rel="shortcut icon" href="">
+
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>    
+    <script type="text/javascript">
+        google.load("jquery", "1");
+        google.setOnLoadCallback(function(){});
+    </script>
+
+
+<style>
+.disabled {
+    pointer-events:none;
+}
+body {
+    background-image:none
+}
+       </style>
+</head>
+<body>
+
+<!--     Barra Iniziale  -->
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <ul class="nav navbar-nav" id="myTab" role="tablist">
+                <form class="form-inline my-2 my-lg-0">
+                  <div id="myNav" class="overlay" style>
+                      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                      <div class="overlay-content">
+                        <a href="./about">About</a>
+                        <a href="./insertDataset/">Dataset Insertion</a>
+                      </div>
+                    </div>
+                </form>
+                    <div id="main">
+                        <span style="font-size:30px;cursor:pointer" onclick="openNav()" class="btn3 fa fa-bars" role="button"></span>
+                      </div>
+                    
+                <li class="nav-item">
+                    <a class="navbar-brand nav-link active" id="dataset-tab" data-toggle="tab" href="#dataset" role="tab" aria-controls="home"
+                        aria-selected="true">H-Bold
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                  <a class="navbar-brand nav-link" id="goToManInsert" data-toggle="tab" href="" role="tab"
+                     aria-controls="profile" aria-selected="false"> Dataset Insertion </a>
+                </li>
+            </ul>
+                
+        </div>
+    </nav>
+
+
+    <!-- <input class="form-control" id="myInput" type="text" placeholder="Search..">
+    <br>
+    parte con tutti i dataset e bottoni
+    -->
+
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="dataset" role="tabpanel" aria-labelledby="dataset-tab">
+            <table class="table table-hover" id="myTable">
+                <thead>
+                    <tr class="tr-fixed">
+                        <th> <a>Dataset Name</a></th>
+                        <th> <a>Triples</a></th>
+                        <th> <a>Class Number</a></th>
+                        <th> <a>Properties Number</a> </th>
+                        <th> <a>Instance Number</a> </th>
+                        <th>Azioni</th>
+                    </tr>
+                </thead>
+
+				<!-- <tbody> mostra i dataset della home
+				senza tbody la tabella della home sarebbe vuota -->
+				<tbody id="dataset-elements"> </tbody>
+            </table>
+        </div>
+
+
+        <!--     Questa parte commentata non si sa cosa faccia, sembra inutile -->
+        <!--<div class="tab-pane fade" id="graph" role="tabpanel" aria-labelledby="graph-tab">
+                   
+                <h1>Node: <span class="text-danger" id="nameNode"></span></h1>
+          
+            
+            <div class="row">
+                    <div class="col-lg-3">
+                            
+                        <nav>
+                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                              <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Attributes</a>
+                              <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Properties</a>
+                                </div>
+                          </nav>
+                          <div class="container">
+                          <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab"></div>
+                            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab"></div>
+                          </div></div>
+
+
+
+                                     <button type="button" id="links" class="btn btn-primary">Links</button>
+                                    <button type="button" id="att" class="btn btn-secondary">Attributes</button>
+                                    <button type="button" id="prop" class="btn btn btn-danger">Properties</button>
+                                  
+                            
+
+                    </div>
+                    <div class="col-lg-8" id="chart"></div>
+                </div>
+
+    
+
+        <div class="tab-pane fade" id="query" role="tabpanel" aria-labelledby="query-tab">...</div>
+    </div> -->
+<!-- fine della parte oscura -->
+
+
+
+        <!-- script legato sempre ai dataset, per ogni dataset popola la tabella con nomi,triple,...  -->
+    <script id="template-dataset-elements" type="text/template7" >
+        {{#each data}}
+        <tr>
+            <!-- serie di <td> che inseriscono i vari campi dei dataset -->
+            <td> {{name}} </td>
+            <td> {{triples}} </td>
+            <td> {{classesCount}} </td>
+            <td> {{propCount}} </td>
+            <td> {{instances}} </td>
+
+
+            <!-- <td> che inserisce i bottoni di SS e CS -->
+            <td>
+                <div class="btn-group" role="group" aria-label="Basic example">
+                    <button type="button" class="ssbtn btn btn-success" data-id="{{ id }}">SS</button>
+                    <button type="button" class="csbtn btn btn-danger" data-id="{{ id }}">CS</button>
+                </div>
+            </td>
+        </tr>
+        {{/each}}
+    </script>
+
+
+    <!-- jQuery e plugin JavaScript  -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/template7.min.js"></script>
+    <script src="js/datatables.min.js"></script>
+
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+    <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+
+
+
+<!-- script che attiva la barra di navigazione in alto
+     è presente in tutti i file, forse si può scrivere una volta sola e risparmiare un po' di codice -->
+    <script>
+		function openNav() {
+			document.getElementById("myNav").style.width = "100%";
+		}
+	  
+		function closeNav() {
+			document.getElementById("myNav").style.width = "0%";
+		}
+    </script>
+
+        <!-- la richiesta ajax va sull'url index e permette di popolare la tabella dei dataset -->
+        <!-- dataype: json è il tipo di dato che si riceve con la richiesta -->
+        <!-- index.html è un file contenente questo script copiaincollato; a cosa serve index.html? -->
+<script>
+    $.ajax({
+        type: 'GET',
+        url: './index',
+        dataType: 'json',
+        success: function(data) {
+			var template = $('#template-dataset-elements').html();
+			var compiledTemplate = Template7.compile(template);                        // tre linee che inseriscono effettivamente i dati nella tabella
+            $('#dataset-elements').html(compiledTemplate(data));
+
+            $('#myTable').on( 'search.dt', function () {                               // parte che gestisce la pressione dei pulsanti SS e CS
+                $('#dataset-elements .ssbtn').click(function () {                      // premendo SS ti manda all'url /ss/ssid
+                    var ssid = $(this).data("id");
+                    window.location="ss/"+ssid;
+                });
+                $('#dataset-elements .csbtn').click(function () {                  // premendo CS ti manda all'url /cs/csid
+                    var csid = $(this).data("id");
+                    window.location="cs/"+csid;
+                });
+			}).DataTable({                                                      // .DataTable permette di collocare i dataset in più pagine differenti
+				"columnDefs": [                                                 // senza, non potremmo scegliere quanti dataset vediamo per ogni pagina
+					 {                                                           // e avremmo una pagina unica da 83 dataset
+						"targets": [ 0 ],
+						"searchable": true
+					 },
+					 {
+						"targets": [ 1, 2, 3, 4 ],
+						"searchable": false
+					 },
+					 {
+						"targets": [ 5 ],
+						"searchable": false,
+						"orderable": false
+					 }
+				]
+			});
+        }
+
+    });  // fine della funzione "success" di ajax
+
+
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {                     // ultime tre linee un po' oscure
+        e.target // newly activated tab
+        e.relatedTarget // previous active tab
+    })
+
+</script>
+
+        <script>
+            $('#goToManInsert').click(function(){
+               location.href = "/hbold/insertDataset/";
+            });
+        </script>
+
+    </div>
+</body>
+
+</html>
