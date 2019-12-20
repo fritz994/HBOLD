@@ -70,7 +70,7 @@ function isEmpty(obj) {
 	// null and undefined are "empty"
 	if (obj == null) return true;
 
-	// Assume if it has a length property with a non-zero value
+	// Assume if it has a length Aperty with a non-zero value
 	// that that property is correct.
 	if (obj.length > 0) return false;
 	if (obj.length === 0) return true;
@@ -1072,8 +1072,13 @@ function getTheData() {
 
 //torna alla pagina iniziale  
 $('#dataset-tab').click(function() {
-	window.location = "../";
+	window.location.href = "../";
 });
+$('#hierical-tab').click(function() {
+	console.log("ciao");
+	window.location.href = "../sshier/"+ssid;
+});
+
 
 
 
@@ -2328,3 +2333,5 @@ $("#launchQuery").click(function() {
 
 
 });
+
+// modifiche tesina
