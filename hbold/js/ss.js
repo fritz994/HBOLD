@@ -2314,9 +2314,9 @@ $("#launchQuery").click(function() {
 
 	q.ss = datag;
 
-	q.proxy = "http:\/\/apollo.ing.unimore.it:8892/";
+	//q.proxy = "http:\/\/apollo.ing.unimore.it:8892/";
 	console.log(q)
-	//q.proxy = "http://127.0.0.1:8892/";
+	q.proxy = "http://127.0.0.1:8892/";
 	qo.curQCN = gq.curQCN;
 	qo.getQuery(); // guarda tesi bernardotti, sembra non definita qui, forse inutile
 	q.ready(); // riga 2840, non nominata nella tesi, NECESSARIO

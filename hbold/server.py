@@ -497,7 +497,17 @@ def createSS(ss, isCluster=False):
     return chunk
 
 
+class Proxy(tornado.web.RequestHandler):
 
+    @session
+    def get(self, k, v):
+        print(k, v)
+        self.session
+        self.session[k] = v
+
+        print(self.session)
+
+        return f"{self.session}"
 
 
 if __name__ == "__main__":
@@ -506,6 +516,7 @@ if __name__ == "__main__":
 
     # seguono i diversi indirizzi a cui si attacca application
     application = tornado.web.Application(handlers=[
+        (r"/hbold/proxy(\d{2})_(\d{2})", Proxy),
         (r"/hbold_bootstrap", redirecter),
         (r"/hbold_bootstrap/", redirecter),
         (r"/lodex", redirecter),
