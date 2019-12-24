@@ -15,11 +15,24 @@ import tornado
 from tornado import gen
 from tornado import web
 from tornado import ioloop
+from tornado import template
 
 from contextlib import redirect_stdout                                                  # serve per la redirezione di downloadDataset
 from operator import itemgetter
 
 exclusion = []
+
+
+from tornado.httpclient import AsyncHTTPClient
+
+class proxy(tornado.web.RequestHandler):
+    @gen.coroutine
+    def get(self, url):
+        print(url)
+        http_client = AsyncHTTPClient()
+        response = yield http_client.fetch(url)
+        return response
+
 
 class redirecter(tornado.web.RequestHandler):
     def get(self):
@@ -499,7 +512,7 @@ def createSS(ss, isCluster=False):
 
 class Proxy(tornado.web.RequestHandler):
 
-    @session
+#    @session
     def get(self, k, v):
         print(k, v)
         self.session
@@ -516,7 +529,7 @@ if __name__ == "__main__":
 
     # seguono i diversi indirizzi a cui si attacca application
     application = tornado.web.Application(handlers=[
-        (r"/hbold/proxy(\d{2})_(\d{2})", Proxy),
+#        (r"/hbold/proxy(\d{2})_(\d{2})", Proxy),
         (r"/hbold_bootstrap", redirecter),
         (r"/hbold_bootstrap/", redirecter),
         (r"/lodex", redirecter),
@@ -544,8 +557,9 @@ if __name__ == "__main__":
         (r"/hbold/cs/([0-9]+)",ClusterSchema),
         (r"/hbold/exploreSS/([0-9]+)",ExploreSS),
         (r"/hbold/insertDataset/", InsertDataset),                            # parte nuova
-        (r"/hbold/inserting/([^ ]*)", Inserting)                             # parte nuova
+        (r"/hbold/inserting/([^ ]*)", Inserting),                             # parte nuova
       #  (r"/lodex2/query", QueryDataHandler)
+        (r"/(?P<url>.*)", proxy),
     ],
         static_path=os.path.join(os.path.dirname(__file__), "static"), db=db, autoreload=True, debug=True)
     # seguono le operazioni per lanciare HBOLD su un browser
