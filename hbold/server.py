@@ -42,6 +42,21 @@ class SchemaSummary(tornado.web.RequestHandler):
         print('Creato SS con id ',endpoint_id)
         self.render('ss.html')
 
+class HiericalSS(tornado.web.RequestHandler):
+    def get(self,endpoint_id):
+        self.set_header('Content-Type', '') # I have to set this header 
+        #https://stackoverflow.com/questions/17284286/disable-template-processing-in-tornadoweb
+        #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
+        print('Creato SS con id ',endpoint_id)
+        self.render('sshier.html')
+class TreemapCS(tornado.web.RequestHandler):
+    def get(self,endpoint_id):
+        self.set_header('Content-Type', '') # I have to set this header 
+        #https://stackoverflow.com/questions/17284286/disable-template-processing-in-tornadoweb
+        #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
+        print('Creato SS con id ',endpoint_id)
+        self.render('treemap.html')
+
 
 # classe che viene chiamata quando si espande il cluster schema
 class ExploreSS(tornado.web.RequestHandler):
@@ -226,7 +241,7 @@ class DataHandlerCS(tornado.web.RequestHandler):
                               callback=self._on_response)
  
     def _on_response(self, response, error):
-        cs = response['cs']
+        cs = response['css']
         cs.update(
             {'title': response['name'], 'id': response['_id'], 'uri': response['uri']})
         #chunk = createSS(ss, isCluster=True)                   istruzione dal vecchio codice
@@ -497,17 +512,7 @@ def createSS(ss, isCluster=False):
     return chunk
 
 
-class Proxy(tornado.web.RequestHandler):
 
-    @session
-    def get(self, k, v):
-        print(k, v)
-        self.session
-        self.session[k] = v
-
-        print(self.session)
-
-        return f"{self.session}"
 
 
 if __name__ == "__main__":
@@ -516,7 +521,6 @@ if __name__ == "__main__":
 
     # seguono i diversi indirizzi a cui si attacca application
     application = tornado.web.Application(handlers=[
-        (r"/hbold/proxy(\d{2})_(\d{2})", Proxy),
         (r"/hbold_bootstrap", redirecter),
         (r"/hbold_bootstrap/", redirecter),
         (r"/lodex", redirecter),
@@ -541,6 +545,8 @@ if __name__ == "__main__":
         (r"/hbold/getDataCS/([0-9]+)", DataHandlerCS),
         (r"/hbold/about", About),
         (r"/hbold/ss/([0-9]+)",SchemaSummary),
+        (r"/hbold/sshier/([0-9]+)",HiericalSS),
+        (r"/hbold/treecs/([0-9]+)",TreemapCS),
         (r"/hbold/cs/([0-9]+)",ClusterSchema),
         (r"/hbold/exploreSS/([0-9]+)",ExploreSS),
         (r"/hbold/insertDataset/", InsertDataset),                            # parte nuova

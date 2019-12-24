@@ -483,6 +483,9 @@ function getTheData() {
 $('#dataset-tab').click(function() {
 	window.location = "../";
 });
+$('#treemapCS').click(function() {
+	window.location.href = "../treecs/"+csid;
+});
 
 
 /* script che non so cosa faccia, probabilmente non viene mai chiamato
