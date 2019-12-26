@@ -16,22 +16,32 @@ from tornado import gen
 from tornado import web
 from tornado import ioloop
 from tornado import template
+from tornado.httpclient import AsyncHTTPClient
 
 from contextlib import redirect_stdout                                                  # serve per la redirezione di downloadDataset
 from operator import itemgetter
 
 exclusion = []
 
+#### mi serve una struttura dati in cui memorizzo gli ip che fanno le richieste e il momento in cui la fanno
+#### usiamo un dict in cui l'ip è la chiave ed il valore è una lista delle richieste... le richieste vengono aggiunte in coda e, se sono più vecchie di x tempo dall'istante attuale si eliminano
 
-from tornado.httpclient import AsyncHTTPClient
+#### questa cosa la controllo solo quando mi arriva una nuova richiesta... sarebbe carino fare un decoratore per la funzione proxy.get
+
+annoying_ip={}
+
 
 class proxy(tornado.web.RequestHandler):
     @gen.coroutine
     def get(self, url):
-        print(url)
+        #url tagliato dopo il carattere ? quindi lo prendo da request
+        url = self.request.uri[1:]
+        sparql_request = tornado.httpclient.HTTPRequest(url=url, headers={"Accept":"application/sparql-results+json", "charset":"UTF-8"})
+
         http_client = AsyncHTTPClient()
-        response = yield http_client.fetch(url)
-        return response
+        response = yield http_client.fetch(sparql_request)
+
+        self.write(response.body.decode())
 
 
 class redirecter(tornado.web.RequestHandler):
@@ -529,17 +539,20 @@ if __name__ == "__main__":
 
     # seguono i diversi indirizzi a cui si attacca application
     application = tornado.web.Application(handlers=[
-#        (r"/hbold/proxy(\d{2})_(\d{2})", Proxy),
-        (r"/hbold_bootstrap", redirecter),
-        (r"/hbold_bootstrap/", redirecter),
-        (r"/lodex", redirecter),
-        (r"/lodex/", redirecter),
-        (r"/lodex2", redirecter),
-        (r"/lodex2/", redirecter),
-        (r"/hbold", redirecter),
+        (r"/hbold_bootstrap/?", redirecter),
+        (r"/lodex2?/?", redirecter),
+        #(r"/hbold", redirecter),
         (r"/hbold/", MainHandlerOk),
         (r"/hbold/index", IndexDatasetHandler),
         (r"/hbold/indexComplete", IndexDatasetHandlerFull),
+        (r"/hbold/getDataSS/([0-9]+)", DataHandlerSS),
+        (r"/hbold/getDataCS/([0-9]+)", DataHandlerCS),
+        (r"/hbold/about", About),
+        (r"/hbold/ss/([0-9]+)",SchemaSummary),
+        (r"/hbold/cs/([0-9]+)",ClusterSchema),
+        (r"/hbold/exploreSS/([0-9]+)",ExploreSS),
+        (r"/hbold/insertDataset/", InsertDataset),                            # parte nuova
+        (r"/hbold/inserting/([^ ]*)", Inserting),                             # parte nuova
         (r'/hbold/bower_components/(.*)', tornado.web.StaticFileHandler, {'path': './bower_components'}),
         (r'/bower_components/(.*)', tornado.web.StaticFileHandler, {'path': './bower_components'}),
         (r'/elements/(.*)', tornado.web.StaticFileHandler, {'path': './elements'}),
@@ -550,16 +563,9 @@ if __name__ == "__main__":
         (r'/hbold/js/(.*)', tornado.web.StaticFileHandler, {'path': './js'}),
         (r'/hbold/css/(.*)', tornado.web.StaticFileHandler, {'path': './css'}),
         (r"/hbold/([0-9]+)", GraphHandler),    #non funziona, sembra ci siano problemi su LODeX.html (riga 362, su "each data")
-        (r"/hbold/getDataSS/([0-9]+)", DataHandlerSS),
-        (r"/hbold/getDataCS/([0-9]+)", DataHandlerCS),
-        (r"/hbold/about", About),
-        (r"/hbold/ss/([0-9]+)",SchemaSummary),
-        (r"/hbold/cs/([0-9]+)",ClusterSchema),
-        (r"/hbold/exploreSS/([0-9]+)",ExploreSS),
-        (r"/hbold/insertDataset/", InsertDataset),                            # parte nuova
-        (r"/hbold/inserting/([^ ]*)", Inserting),                             # parte nuova
-      #  (r"/lodex2/query", QueryDataHandler)
         (r"/(?P<url>.*)", proxy),
+
+      #  (r"/lodex2/query", QueryDataHandler)
     ],
         static_path=os.path.join(os.path.dirname(__file__), "static"), db=db, autoreload=True, debug=True)
     # seguono le operazioni per lanciare HBOLD su un browser
