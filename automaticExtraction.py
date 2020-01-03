@@ -60,8 +60,8 @@ def automaticExtraction(argv):
         endpointExtraction(end['_id'])
 
         print("Generating schema summary ")
-        generateSS([str(end['_id'])])
-        generateCS([str(end['_id'])])
+        generateSS([(end['_id'])])
+        generateCS([(end['_id'])])
     else:
         print("Something awful happened")
 

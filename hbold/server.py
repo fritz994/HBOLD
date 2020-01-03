@@ -11,38 +11,18 @@ import ssl
 from downloadDataset import downloadDataset as dd
 import SchemaExtractorTestV3
 
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
 import tornado
 from tornado import gen
 from tornado import web
 from tornado import ioloop
-from tornado import template
-from tornado.httpclient import AsyncHTTPClient
 
 from contextlib import redirect_stdout                                                  # serve per la redirezione di downloadDataset
 from operator import itemgetter
 
 exclusion = []
-
-#### mi serve una struttura dati in cui memorizzo gli ip che fanno le richieste e il momento in cui la fanno
-#### usiamo un dict in cui l'ip è la chiave ed il valore è una lista delle richieste... le richieste vengono aggiunte in coda e, se sono più vecchie di x tempo dall'istante attuale si eliminano
-
-#### questa cosa la controllo solo quando mi arriva una nuova richiesta... sarebbe carino fare un decoratore per la funzione proxy.get
-
-annoying_ip={}
-
-
-class proxy(tornado.web.RequestHandler):
-    @gen.coroutine
-    def get(self, url):
-        #url tagliato dopo il carattere ? quindi lo prendo da request
-        url = self.request.uri[1:]
-        sparql_request = tornado.httpclient.HTTPRequest(url=url, headers={"Accept":"application/sparql-results+json", "charset":"UTF-8"})
-
-        http_client = AsyncHTTPClient()
-        response = yield http_client.fetch(sparql_request)
-
-        self.write(response.body.decode())
-
 
 class redirecter(tornado.web.RequestHandler):
     def get(self):
@@ -64,6 +44,21 @@ class SchemaSummary(tornado.web.RequestHandler):
         #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
         print('Creato SS con id ',endpoint_id)
         self.render('ss.html')
+
+class HiericalSS(tornado.web.RequestHandler):
+    def get(self,endpoint_id):
+        self.set_header('Content-Type', '') # I have to set this header 
+        #https://stackoverflow.com/questions/17284286/disable-template-processing-in-tornadoweb
+        #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
+        print('Creato SS con id ',endpoint_id)
+        self.render('sshier.html')
+class TreemapCS(tornado.web.RequestHandler):
+    def get(self,endpoint_id):
+        self.set_header('Content-Type', '') # I have to set this header 
+        #https://stackoverflow.com/questions/17284286/disable-template-processing-in-tornadoweb
+        #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
+        print('Creato SS con id ',endpoint_id)
+        self.render('treemap.html')
 
 
 # classe che viene chiamata quando si espande il cluster schema
@@ -194,14 +189,16 @@ class Inserting(tornado.web.RequestHandler):
         sender_email = "hboldprova2@gmail.com"
         receiver_email = mail
         password = "123.stella"
-
+        msg = MIMEMultipart('alternative')
+		
         if endp != "":
-            message = """\
-                 Subject: TENTATIVO DI ESTRAZIONE\n\n
-                 Tentativo di estrazione del dataset all'endpoint """ + endp + """.\n""" + printline
-        else:
-            message = """\
-                             Subject: TENTATIVO DI ESTRAZIONE\n\n""" + printline
+            msg["Subject"] = "H-BOLD: Extraction result"
+            msg["To"] = receiver_email
+            msg["From"] = sender_email
+            msg.attach(MIMEText("Extraction of the dataset at the link " + endp + ".\n" + printline, 'plain'))
+            #message = """\Subject: Extraction\n\nExtraction of the dataset at the link """ + endp + """.\n""" + printline
+        #else:
+        #    message = """\Subject: Extraction\n\n""" + printline
 
  
         context = ssl.create_default_context()
@@ -210,9 +207,9 @@ class Inserting(tornado.web.RequestHandler):
             server.starttls(context=context)
             server.ehlo()  # Can be omitted
             server.login(sender_email, password)
-            server.sendmail(sender_email, receiver_email, message)
+            server.sendmail(sender_email, receiver_email, msg.as_string())
  
-        print("Mail inviata con successo a " + receiver_email) 
+        print("Mail sent successfully to " + receiver_email) 
          
  
  
@@ -249,7 +246,7 @@ class DataHandlerCS(tornado.web.RequestHandler):
                               callback=self._on_response)
  
     def _on_response(self, response, error):
-        cs = response['cs']
+        cs = response['css']
         cs.update(
             {'title': response['name'], 'id': response['_id'], 'uri': response['uri']})
         #chunk = createSS(ss, isCluster=True)                   istruzione dal vecchio codice
@@ -520,17 +517,7 @@ def createSS(ss, isCluster=False):
     return chunk
 
 
-class Proxy(tornado.web.RequestHandler):
 
-#    @session
-    def get(self, k, v):
-        print(k, v)
-        self.session
-        self.session[k] = v
-
-        print(self.session)
-
-        return f"{self.session}"
 
 
 if __name__ == "__main__":
@@ -539,20 +526,16 @@ if __name__ == "__main__":
 
     # seguono i diversi indirizzi a cui si attacca application
     application = tornado.web.Application(handlers=[
-        (r"/hbold_bootstrap/?", redirecter),
-        (r"/lodex2?/?", redirecter),
-        #(r"/hbold", redirecter),
+        (r"/hbold_bootstrap", redirecter),
+        (r"/hbold_bootstrap/", redirecter),
+        (r"/lodex", redirecter),
+        (r"/lodex/", redirecter),
+        (r"/lodex2", redirecter),
+        (r"/lodex2/", redirecter),
+        (r"/hbold", redirecter),
         (r"/hbold/", MainHandlerOk),
         (r"/hbold/index", IndexDatasetHandler),
         (r"/hbold/indexComplete", IndexDatasetHandlerFull),
-        (r"/hbold/getDataSS/([0-9]+)", DataHandlerSS),
-        (r"/hbold/getDataCS/([0-9]+)", DataHandlerCS),
-        (r"/hbold/about", About),
-        (r"/hbold/ss/([0-9]+)",SchemaSummary),
-        (r"/hbold/cs/([0-9]+)",ClusterSchema),
-        (r"/hbold/exploreSS/([0-9]+)",ExploreSS),
-        (r"/hbold/insertDataset/", InsertDataset),                            # parte nuova
-        (r"/hbold/inserting/([^ ]*)", Inserting),                             # parte nuova
         (r'/hbold/bower_components/(.*)', tornado.web.StaticFileHandler, {'path': './bower_components'}),
         (r'/bower_components/(.*)', tornado.web.StaticFileHandler, {'path': './bower_components'}),
         (r'/elements/(.*)', tornado.web.StaticFileHandler, {'path': './elements'}),
@@ -563,8 +546,16 @@ if __name__ == "__main__":
         (r'/hbold/js/(.*)', tornado.web.StaticFileHandler, {'path': './js'}),
         (r'/hbold/css/(.*)', tornado.web.StaticFileHandler, {'path': './css'}),
         (r"/hbold/([0-9]+)", GraphHandler),    #non funziona, sembra ci siano problemi su LODeX.html (riga 362, su "each data")
-        (r"/(?P<url>.*)", proxy),
-
+        (r"/hbold/getDataSS/([0-9]+)", DataHandlerSS),
+        (r"/hbold/getDataCS/([0-9]+)", DataHandlerCS),
+        (r"/hbold/about", About),
+        (r"/hbold/ss/([0-9]+)",SchemaSummary),
+        (r"/hbold/sshier/([0-9]+)",HiericalSS),
+        (r"/hbold/treecs/([0-9]+)",TreemapCS),
+        (r"/hbold/cs/([0-9]+)",ClusterSchema),
+        (r"/hbold/exploreSS/([0-9]+)",ExploreSS),
+        (r"/hbold/insertDataset/", InsertDataset),                            # parte nuova
+        (r"/hbold/inserting/([^ ]*)", Inserting)                             # parte nuova
       #  (r"/lodex2/query", QueryDataHandler)
     ],
         static_path=os.path.join(os.path.dirname(__file__), "static"), db=db, autoreload=True, debug=True)

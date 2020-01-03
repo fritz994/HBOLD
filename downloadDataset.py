@@ -13,10 +13,10 @@ from xml.dom.minidom import parseString
 
 
 def downloadDataset(argv):
-    if argv[0] in ["https://www.europeandataportal.eu/sparql-manager/", "https://io.datascience-paris-saclay.fr/sparql", "http://data.europa.eu/euodp/sparqlep"]:
+    if argv[0] in ["https://www.europeandataportal.eu/sparql", "https://io.datascience-paris-saclay.fr/sparql", "http://data.europa.eu/euodp/sparqlep"]:
         sparql = SPARQLWrapper(argv[0])
         q = util.queryGenerator.QueryGenerator()
-        if argv[0] == "https://www.europeandataportal.eu/sparql-manager/":
+        if argv[0] == "https://www.europeandataportal.eu/sparql":
             sparql.setQuery(q.EuDownload().query)
         elif argv[0] == "https://io.datascience-paris-saclay.fr/sparql":
             sparql.setQuery(q.dataScienceParisDownload().query)
@@ -32,6 +32,7 @@ def downloadDataset(argv):
         pprint(se.parseResponseForDatasetExtr(None, results, "test_connection", False))
         print("-----")
 
+        return
 
         if se.parseResponseForDatasetExtr(None, results, "test_connection", False):
             endArr = []
@@ -39,7 +40,6 @@ def downloadDataset(argv):
 
             for end in se.parseResponseForDatasetExtr(None, results, "test_connection", False):                    # end è un oggetto con 'dataset', 'title' e 'url' dell'endpoint
                 if 'title' in end:
-                    end["url"] = end["url"].split("?")[0]
                     if end['url'] in endDIct:
                         tmp=endDIct[end['url']]
                         tmp['name'].append(end['title'])
@@ -72,9 +72,6 @@ def downloadDataset(argv):
             print("Ricerca di nuovi dataset sul portale " + argv[0])
             print("Trovati "+str(len(datasets))+" nuovi datasets")
             print(datasets)
-
-            return
-
             if len(datasets) > 0:
                 mongo.inserLodexDatasets(datasets)
                 for i in range(0, len(datasets)):
@@ -107,14 +104,13 @@ def downloadDataset(argv):
                 datasets.append(ds)
             else:
                 print("-----")
-                print(url + " e' un endpoint valido, ")
-                print("ma e' gia' presente in MongoDB; non lo aggiungo.")
-                print("L'estrazione viene evitata in quanto sarebbe inutile.")
+                print(url + " is a valid endpoint but it is already present on our server.")
+                print("The extraction has not been performed.")
 
         else:
             print("-----")
-            print(url + " non e' un endpoint valido o non e' al momento raggiungibile.")
-            print("Estrazione fallita.")
+            print(url + " it is not a valid endpoint or it is not reachable at the moment. Retry later.")
+            print("Extraction failed.")
 
         if len(datasets) > 0:
             mongo.inserLodexDatasets(datasets)
@@ -122,12 +118,11 @@ def downloadDataset(argv):
             print(datasets)
             automaticExtraction([argv[0]])
             print("-----")
-            print(url + " e' un endpoint valido, ")
-            print("non presente su MongoDB; lo aggiungo.")
-            print("Estrazione andata a buon fine.")
+            print(url + " is a valid endpoint and it is not present on our server.")
+            print("Extraction ended correctly.")
 
 def main(argv):
-    for portal in ["https://www.europeandataportal.eu/sparql-manager/", "https://io.datascience-paris-saclay.fr/sparql", "http://data.europa.eu/euodp/sparqlep"]:
+    for portal in ["https://www.europeandataportal.eu/sparql", "https://io.datascience-paris-saclay.fr/sparql", "http://data.europa.eu/euodp/sparqlep"]:
         print(portal)
         downloadDataset([portal])
 
