@@ -13,10 +13,10 @@ from xml.dom.minidom import parseString
 
 
 def downloadDataset(argv):
-    if argv[0] in ["https://www.europeandataportal.eu/sparql", "https://io.datascience-paris-saclay.fr/sparql", "http://data.europa.eu/euodp/sparqlep"]:
+    if argv[0] in ["https://www.europeandataportal.eu/sparql-manager/", "https://io.datascience-paris-saclay.fr/sparql", "http://data.europa.eu/euodp/sparqlep"]:
         sparql = SPARQLWrapper(argv[0])
         q = util.queryGenerator.QueryGenerator()
-        if argv[0] == "https://www.europeandataportal.eu/sparql":
+        if argv[0] == "https://www.europeandataportal.eu/sparql-manager/":
             sparql.setQuery(q.EuDownload().query)
         elif argv[0] == "https://io.datascience-paris-saclay.fr/sparql":
             sparql.setQuery(q.dataScienceParisDownload().query)
@@ -32,7 +32,6 @@ def downloadDataset(argv):
         pprint(se.parseResponseForDatasetExtr(None, results, "test_connection", False))
         print("-----")
 
-        return
 
         if se.parseResponseForDatasetExtr(None, results, "test_connection", False):
             endArr = []
@@ -40,6 +39,7 @@ def downloadDataset(argv):
 
             for end in se.parseResponseForDatasetExtr(None, results, "test_connection", False):                    # end è un oggetto con 'dataset', 'title' e 'url' dell'endpoint
                 if 'title' in end:
+                    end["url"] = end["url"].split("?")[0]
                     if end['url'] in endDIct:
                         tmp=endDIct[end['url']]
                         tmp['name'].append(end['title'])
@@ -72,6 +72,9 @@ def downloadDataset(argv):
             print("Ricerca di nuovi dataset sul portale " + argv[0])
             print("Trovati "+str(len(datasets))+" nuovi datasets")
             print(datasets)
+
+            return
+
             if len(datasets) > 0:
                 mongo.inserLodexDatasets(datasets)
                 for i in range(0, len(datasets)):
@@ -124,7 +127,7 @@ def downloadDataset(argv):
             print("Estrazione andata a buon fine.")
 
 def main(argv):
-    for portal in ["https://www.europeandataportal.eu/sparql", "https://io.datascience-paris-saclay.fr/sparql", "http://data.europa.eu/euodp/sparqlep"]:
+    for portal in ["https://www.europeandataportal.eu/sparql-manager/", "https://io.datascience-paris-saclay.fr/sparql", "http://data.europa.eu/euodp/sparqlep"]:
         print(portal)
         downloadDataset([portal])
 
