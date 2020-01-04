@@ -10,7 +10,7 @@ from extractor.util import mongo
 
 threads = []
 
-"""Extract schema viene chiamato se l'endpoint è vuoto o non aggiornato """
+"""Extract schema viene chiamato se l'endpoint <C3><A8> vuoto o non aggiornato """
 def threadProcess(endId):
     end = mongo.getByIdLodex(endId)
     thread = threading.Thread(target=se.ExtractSchema, args=(end, False))
@@ -29,7 +29,7 @@ def endpointExtraction(id):
     p = mongo.getExtById(id)
 
     """per ogni endpoint controllo se l'estrazione degli indici (e quindi anche la generazione delle istanze della
-       collection 'ext') e' stata compiuta correttamente o no. In caso negativo procedo con un nuovo tentativo di 
+       collection 'ext') e' stata compiuta correttamente o no. In caso negativo procedo con un nuovo tentativo di
        estrarre gli indici"""
     if len(p) == 0:
         threadProcess(id)

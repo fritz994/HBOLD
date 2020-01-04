@@ -38,7 +38,7 @@ def downloadDataset(argv):
             endArr = []
             endDIct = {}
 
-            for end in se.parseResponseForDatasetExtr(None, results, "test_connection", False):                    # end è un oggetto con 'dataset', 'title' e 'url' dell'endpoint
+            for end in se.parseResponseForDatasetExtr(None, results, "test_connection", False):                    # end <C3><A8> un oggetto con 'dataset', 'title' e 'url' dell'endpoint
                 if 'title' in end:
                     if end['url'] in endDIct:
                         tmp=endDIct[end['url']]
@@ -86,7 +86,7 @@ def downloadDataset(argv):
         id = mongo.startTestNew(url)
         print(id)
 
-        """in runInfo, id è il numero dentro a ObjectId"""
+        """in runInfo, id <C3><A8> il numero dentro a ObjectId"""
         copy = False
         count = mongo.getLastIdEndpointsLodex()
         datasets = []
