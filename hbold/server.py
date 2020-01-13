@@ -24,6 +24,8 @@ from tornado.httpclient import AsyncHTTPClient
 from contextlib import redirect_stdout                                                  # serve per la redirezione di downloadDataset
 from operator import itemgetter
 
+exclusion = []
+
 
 #### mi serve una struttura dati in cui memorizzo gli ip che fanno le richieste e il momento in cui la fanno
 #### usiamo un dict in cui l'ip <C3><A8> la chiave ed il valore <C3><A8> una lista delle richieste... le richieste vengono aggiunte in coda e, se sono pi<C3><B9> vecchie di x tempo dall'istante attuale si eliminano
@@ -268,7 +270,7 @@ class DataHandlerCS(tornado.web.RequestHandler):
                               callback=self._on_response)
  
     def _on_response(self, response, error):
-        cs = response['css']
+        cs = response['cs']
         cs.update(
             {'title': response['name'], 'id': response['_id'], 'uri': response['uri']})
         #chunk = createSS(ss, isCluster=True)                   istruzione dal vecchio codice
@@ -577,13 +579,13 @@ if __name__ == "__main__":
         (r"/hbold/cs/([0-9]+)",ClusterSchema),
         (r"/hbold/exploreSS/([0-9]+)",ExploreSS),
         (r"/hbold/insertDataset/", InsertDataset),                            # parte nuova
-        (r"/hbold/inserting/([^ ]*)", Inserting)                             # parte nuova
-        (r"/", proxy)
+        (r"/hbold/inserting/([^ ]*)", Inserting),                             # parte nuova
+        (r"/(.*)/$", proxy),
       #  (r"/lodex2/query", QueryDataHandler)
     ],
         static_path=os.path.join(os.path.dirname(__file__), "static"), db=db, autoreload=True, debug=True)
     # seguono le operazioni per lanciare HBOLD su un browser
-    port = 8891
+    port = 8892
     print('Listening on http://localhost:', port)
     application.listen(port)
     tornado.ioloop.IOLoop.instance().start()

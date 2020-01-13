@@ -28,17 +28,17 @@ def downloadDataset(argv):
         #print("Extraction endpoints")
         results = sparql.queryAndConvert()
         #print("Parsing results\n")
-        pprint(results)
-        pprint(se.parseResponseForDatasetExtr(None, results, "test_connection", False))
-        print("-----")
-
-        return
+        #pprint(results)
+        #pprint(se.parseResponseForDatasetExtr(None, results, "test_connection", False))
+        #print("-----")
 
         if se.parseResponseForDatasetExtr(None, results, "test_connection", False):
             endArr = []
             endDIct = {}
 
+            cont = 0
             for end in se.parseResponseForDatasetExtr(None, results, "test_connection", False):                    # end <C3><A8> un oggetto con 'dataset', 'title' e 'url' dell'endpoint
+                end["url"] = end["url"].split("?")[0]
                 if 'title' in end:
                     if end['url'] in endDIct:
                         tmp=endDIct[end['url']]
@@ -46,7 +46,7 @@ def downloadDataset(argv):
                         endDIct[end['url']] = tmp
                     else:
                         endDIct[end['url']] = {'name':[end['title']]}
-
+                cont += 1
             datasets = []
             urls = []
             count = mongo.getLastIdEndpointsLodex()
@@ -70,8 +70,10 @@ def downloadDataset(argv):
 
             # Stringa per il parsing
             print("Ricerca di nuovi dataset sul portale " + argv[0])
+            print(cont)
             print("Trovati "+str(len(datasets))+" nuovi datasets")
             print(datasets)
+            return
             if len(datasets) > 0:
                 mongo.inserLodexDatasets(datasets)
                 for i in range(0, len(datasets)):
