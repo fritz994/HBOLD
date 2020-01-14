@@ -6,8 +6,9 @@ sys.path.append(r"../util")
 import os
 import motor
 import pprint
-import smtplib                                                                       # serve per mandare la mail
+import smtplib   # serve per mandare la mail
 import ssl
+import time
 from downloadDataset import downloadDataset as dd
 import SchemaExtractorTestV3
 
@@ -33,8 +34,41 @@ exclusion = []
 #### questa cosa la controllo solo quando mi arriva una nuova richiesta... sarebbe carino fare un decoratore per la funzione proxy.get
 
 annoying_ip={}
+def check_ip(func):
+    def function_wrapper(self, url):
+	    #controllo che un ip non faccia più di 10 chiamate al minuto
+        ip = self.request.remote_ip
+        now = time.time()
+        to_return = "OK"
+		
+        if ip not in annoying_ip.keys():
+            annoying_ip[ip] = list()
+            annoying_ip["count"] = 0
+
+        annoying_ip[ip].append(now)
+        annoying_ip["count"] += 1
+
+        if len(annoying_ip[ip]) > 10:
+            if now - annoying_ip[ip][0] < 60:
+                to_return = "NO"
+
+            #tolgo tutte le entry che sono più vecchie di 60 secondi
+            index = 0
+            for i in range(len(annoying_ip[ip])):
+                if now - 60 < annoying_ip[ip][i]:
+                    index = i
+                    break
+            annoying_ip[ip] = annoying_ip[ip][index:]
+
+        if to_return == "NO":
+            self.write("Too many requests, wait some time")
+        else:
+            return func(self, url)
+    return function_wrapper
+
 
 class proxy(tornado.web.RequestHandler):
+    @check_ip
     @gen.coroutine
     def get(self, url):
         #url tagliato dopo il carattere ? quindi lo prendo da request
@@ -550,12 +584,8 @@ if __name__ == "__main__":
 
     # seguono i diversi indirizzi a cui si attacca application
     application = tornado.web.Application(handlers=[
-        (r"/hbold_bootstrap", redirecter),
-        (r"/hbold_bootstrap/", redirecter),
-        (r"/lodex", redirecter),
-        (r"/lodex/", redirecter),
-        (r"/lodex2", redirecter),
-        (r"/lodex2/", redirecter),
+        (r"/hbold_bootstrap/?", redirecter),
+        (r"/lodex2?/?", redirecter),
         (r"/hbold", redirecter),
         (r"/hbold/", MainHandlerOk),
         (r"/hbold/index", IndexDatasetHandler),
@@ -580,12 +610,12 @@ if __name__ == "__main__":
         (r"/hbold/exploreSS/([0-9]+)",ExploreSS),
         (r"/hbold/insertDataset/", InsertDataset),                            # parte nuova
         (r"/hbold/inserting/([^ ]*)", Inserting),                             # parte nuova
-        (r"/(.*)/$", proxy),
+        (r"/(.*)$", proxy),
       #  (r"/lodex2/query", QueryDataHandler)
     ],
         static_path=os.path.join(os.path.dirname(__file__), "static"), db=db, autoreload=True, debug=True)
     # seguono le operazioni per lanciare HBOLD su un browser
-    port = 8892
+    port = 8891
     print('Listening on http://localhost:', port)
     application.listen(port)
     tornado.ioloop.IOLoop.instance().start()
