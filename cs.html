@@ -1,0 +1,141 @@
+{% extends "base_template.html" %}
+
+{% block additional_css %}
+	<style>		
+		#classes {
+			height: 350px;
+			overflow-y: auto;
+			overflow-x: auto
+		}
+
+		#goToSS {
+			display: none;
+			height: 60px
+		}
+		.navbar-brand {
+	display: inline-block;
+	padding-top: .3125rem;
+	padding-bottom: .3125rem;
+	margin-right: 1rem;
+	margin-left: 1rem;
+	font-size: 2rem;
+	height: 50px;
+	line-height: 35px;
+	white-space: nowrap;
+}
+	</style>
+{% end %}
+
+{% block content %}
+	
+		<!-- Barra Iniziale -->
+		<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+			<div class="container">
+				<ul class="nav navbar-nav" id="myTab" role="tablist">
+					<form class="form-inline my-2 my-lg-0">
+					  <div id="myNav" class="overlay" syle>
+						  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+						  <div class="overlay-content">
+							<a href="../about">About</a>
+							<a href="../insertDataset/">Dataset Insertion</a>
+						  </div>
+						</div>
+					</form>
+						<div id="main">
+							<span style="font-size:30px;cursor:pointer" onclick="openNav()" class="btn3 fa fa-bars" role="button"></span>
+						  </div>
+						
+					<li class="nav-item">
+						<a class="navbar-brand nav-link active " id="dataset-tab" data-toggle="tab" href="#dataset" role="tab" aria-controls="home"
+							aria-selected="true">H-Bold
+							<span class="sr-only">(current)</span>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="navbar-brand nav-link" id="graph-tab" data-toggle="tab" href="#graph" role="tab" aria-controls="profile" aria-selected="false">Cluster Schema</a>
+					</li>
+					<li class="nav-item">
+                        <a class="navbar-brand nav-link" id="treemapCS" data-toggle="tab" href="#treemap" role="tab" aria-controls="profile" aria-selected="false">TreeMapCS</a>
+					</li>
+					<li class="nav-item">
+						<a class="navbar-brand nav-link" id="sunCS" data-toggle="tab" href="#hierical" role="tab"
+							aria-controls="profile" aria-selected="false">Sunburst
+							
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="navbar-brand nav-link" id="packCS" data-toggle="tab" href="#hierical" role="tab"
+							aria-controls="profile" aria-selected="false">CirclePack
+							<span class="sr-only">(current)</span>
+						</a>
+					</li>
+				</ul>
+					
+			</div>
+		</nav>
+
+		<!-- PARTE VECCHIA
+		<div class="row">
+			<div class="col-lg-8" id="chart" role="tabpanel" aria-labelledby="graph-tab">
+						
+				<h1>Node: <span class="text-danger" id="nameNode"></span></h1>
+			</div>
+			<div class="col-lg-4">
+				<div class="tab-content" id="classes" role="tabpanel" aria-labelledby="graph-tab"></div>
+				<button type="button"  id="goToSS" class="btn btn-primary">Create Schema Summary</button>
+			</div>
+		</div>
+		</div> -->
+
+		<!-- PARTE NUOVA MIA -->
+		<div class="row no-gutters">
+				<div class="col-lg-4 box" style="background-color: #e9ecef;
+												 position: fixed;
+												 top: 0px;
+												 bottom: 0px;
+												 padding-top: 70px;
+												 height: 100%;
+												 border-right: 10px solid rgba(0, 0, 0, 0.1);
+												 background-clip: padding-box;
+												 ">
+					<div class="header">
+						<div class="jumbotron jumbotron-fluid" style="padding: 10px 10px; margin: 0px">
+							<h2 class="display-4" style="font-size: 3.0vw">Node: <span class="text-danger" id="nameNode" style="font-size: 2.0vw"></span></h2><br>
+							<div class="row no-gutters">
+							   <div class="col">
+									<p class="lead">From <span class="graph-title"></span></p>
+							   </div>
+							</div>
+							<h2><button class="btn btn-secondary btn-info" id="goToSS">Create Schema Summary</button></h2>
+						</div>
+					</div>
+					<div class="container content">
+						<div class="tab-content" id="classes" role="tabpanel" aria-labelledby="graph-tab"></div>
+					</div>
+				</div>
+		</div>
+
+		<div class="tab-pane fade" id="graph" role="tabpanel" aria-labelledby="graph-tab">
+
+			<div class="row no-gutters">
+
+				<div class="col-lg-8 offset-lg-4" id="chart"></div>
+			</div>
+
+			<!--<div class="tab-pane fade" id="query" role="tabpanel" aria-labelledby="query-tab">...</div>-->
+		</div>
+		<!-- FINE PARTE NUOVA MIA-->
+				
+				<!-- <div class="col-lg-2" id="nodelink"><a href="#" class="btn btn-primary btn-lg active" role="button" aria-pressed="true" id="nodelinks">Node Links</a> -->
+			  
+
+
+	<!-- <div class="tab-pane fade" id="query" role="tabpanel" aria-labelledby="query-tab">...</div> -->
+
+
+{% end %}
+
+{% block additional_js %}
+		<script src="../js/cs.js"></script> 
+{% end %}
+    
