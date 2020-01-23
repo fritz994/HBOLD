@@ -40,6 +40,7 @@ $.ajax({
         */
 
     }
+
 });
 
 $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
@@ -222,6 +223,7 @@ Graph.prototype.drawGraph = function(graph) {
     var max_np = this.ss.links[0].np;
 
     for (i = 1; i < this.ss.nodes.length; i++) {
+
         if (this.ss.nodes[i].ni > max_ni)
             max_ni = this.ss.nodes[i].ni;
     }
@@ -263,6 +265,7 @@ Graph.prototype.drawGraph = function(graph) {
     divTT = d3.select("#chart").append("div")
         .attr("class", "tooltip")
         .style("position", "absolute")
+
         .style("top", 5)
         .style("left", 5)
         .style("opacity", 1);
@@ -288,6 +291,7 @@ Graph.prototype.drawGraph = function(graph) {
             return 'edge' + i;
         })
         .attr('marker-end', 'url(#arrowhead)')
+
         .style("stroke-width", 0.8)
         .style("stroke-opacity", 0.8)
         .attr("x1", function(d) {
@@ -331,6 +335,7 @@ Graph.prototype.drawGraph = function(graph) {
         .enter().append("svg:circle")
         .attr("class", "node")
         .attr("stroke", "black")
+
         .attr("stroke-width", "0.5px")
         .attr("r", function(d) {
             return (d.ni * 20 / max_ni) + 5;
@@ -347,6 +352,7 @@ Graph.prototype.drawGraph = function(graph) {
         .enter()
         .append("text")
         .attr({
+
             "x": function(d) {
                 return d.x + (d.ni * 25 / max_ni) + 5 + stroke_width;
             },
@@ -368,10 +374,12 @@ Graph.prototype.drawGraph = function(graph) {
         })
 
     nodes.append("title")
+
         .text(function(d) {
             return d.fullName;
         });
     links.append("title")
+
         .text(function(d) {
             return d.name;
         });
@@ -401,6 +409,7 @@ Graph.prototype.drawGraph = function(graph) {
         .style("pointer-events", "none");
 
     force.on("tick", function() {
+
         nodes.attr({
             "cx": function(d) {
                 return d.x = Math.max(10, Math.min(this.width - 10, d.x));
@@ -428,13 +437,16 @@ Graph.prototype.drawGraph = function(graph) {
         nodelabels.attr("x", function(d) {
                 return d.x + (d.ni * 25 / max_ni) + 5 + stroke_width;
             })
+
             .attr("y", function(d) {
                 return d.y;
+
             });
 
         edgepaths.attr('d', function(d) {
             var path = 'M ' + d.source.x + ' ' + d.source.y + ' L ' + d.target.x + ' ' + d.target.y;
             //console.log(d)
+
             return path
         });
 
@@ -526,15 +538,19 @@ Graph.prototype.drawGraph = function(graph) {
         gen();
 
         /*       
+								
 
                     //AGGIUNGO ATTRIBUTI
                     var htmlatt = "";
                    // console.log("d.att: ", d.att);
 
+												 
+									 
 
                 for ( var i = 0; i < d.att.length; i++ ){
                     var cur = d.att[i];
 
+								 
 
                         console.log("cur", cur);
                     if(cur.isInQuery){
@@ -546,6 +562,7 @@ Graph.prototype.drawGraph = function(graph) {
                     }
                 }
 
+		
 
                 $('#nav-home tbody').html(htmlatt);
 
@@ -558,6 +575,8 @@ Graph.prototype.drawGraph = function(graph) {
                     gq.currentNodeChanged();
 
                      var properties = gq.propertylist;
+
+								  
                 var htmlprop = "";
                // console.log("properties", properties);
 
@@ -566,7 +585,15 @@ Graph.prototype.drawGraph = function(graph) {
                     var cur = properties.entranti[i];
 
 
+										  
+								
+																																																																																																																																																																																																																																																															  
+									  
+					  
+																																																																																						   
                         $(".op-head").hide();
+			   
+		   
 
 
                     htmlprop += '<tr><td><div class="btn-group" role="group" aria-label="Basic example"><button type="button" class="btn-mo-prop btn btn-success" data-toggle="tooltip" data-placement="top" title="Mandatory" pos="' + cur.pos + '" mandatory="1" entranti="1" nodeid="' + cur.index + '">M</button><button type="button" class="btn-mo-prop btn btn-danger" pos="' + cur.pos + '" mandatory="0" entranti="1" nodeid="' + cur.index + '">O</button></div></td><th scope="row"><div style="width: 15px; height: 15px; border-radius: 50%; margin-top: 5px; background-color: ' + cur.colProp + '"></div></th><td>' + cur.name + '</td><td><i class="zmdi zmdi-arrow-left zmdi-hc-fw" style="font-size: 24px"></i></td><td>' + cur.source + '</td><td>' + cur.card + '</td></tr>';
@@ -577,7 +604,15 @@ Graph.prototype.drawGraph = function(graph) {
 
 
                         $(".op-head").hide();
+			  
+										
+														   
+							
+									  
 
+												
+							
+												  
 
                     htmlprop += '<tr><td><div class="btn-group" role="group" aria-label="Basic example"><button type="button" class="btn-mo-prop btn btn-success" data-toggle="tooltip" data-placement="top" title="Mandatory" pos="' + cur.pos + '" mandatory="1" entranti="0" nodeid="' + cur.index + '">M</button><button type="button" class="btn-mo-prop btn btn-danger" pos="' + cur.pos + '" mandatory="0" entranti="0" nodeid="' + cur.index + '">O</button></div></td><th scope="row"><div style="width: 15px; height: 15px; border-radius: 50%; margin-top: 5px; background-color: ' + cur.colProp + '"></div></th><td>' + cur.name + '</td><td><i class="zmdi zmdi-arrow-right zmdi-hc-fw" style="font-size: 24px"></i></td><td>' + cur.target + '</td><td>' + cur.card + '</td></tr>';
                 }
@@ -587,8 +622,11 @@ Graph.prototype.drawGraph = function(graph) {
                      $(".op-head").hide();
 
 
+									   
 
 
+																																																																																																																																																																																																																																																																																																																																															  
+		   
 
                     */
 
@@ -653,8 +691,10 @@ function doTheTreeViz(control) {
 
     // Update the nodes
     var node = svg.selectAll("g.node")
+
         .data(control.nodes, function(d) {
             return d.unique;
+
         });
 
     node.select("circle")
@@ -688,6 +728,7 @@ function doTheTreeViz(control) {
                     }
                 }, control.clickHack);
             }
+
         })
 
         .on("click", function(d) {
@@ -721,6 +762,7 @@ function doTheTreeViz(control) {
             for (var j = 0; j < control.links.length; j++) {
 
                 if (d.index == control.links[j].source.index || d.index == control.links[j].target.index) {
+
                     for (var k = 0; k < control.links[j].label.length; k++) {
 
                         //var prop=control.links[j].label[k].name;
@@ -760,6 +802,7 @@ function doTheTreeViz(control) {
                                 }
 
                                 if(d.index == control.links[j].target.index && ok==0 ){
+													  
 
                                     htmlprop += " ←  " + control.links[j].source.name + '</p>';
                                     ok=1;
@@ -832,6 +875,7 @@ function doTheTreeViz(control) {
             setTimeout(function() {
                 if (control.nodeClickInProgress) {
                     control.nodeClickInProgress = false;
+
                     if (control.options.nodeFocus) {
                         d.isCurrentlyFocused = !d.isCurrentlyFocused;
                         doTheTreeViz(makeFilteredData(control));
@@ -871,9 +915,11 @@ function doTheTreeViz(control) {
             if (control.data.nodes[i].ni > max)
                 max = control.data.nodes[i].ni;
         }
+
         return (d.ni * 20 / max) + 5;
     }
     //seleziona il colore del nodo in base al vocabolario di riferimento
+
     function getColor(d) {
         return control.options.nodeFocus && d.isCurrentlyFocused ? control.options.nodeFocusColor : control.color(d.vocab);
     }
@@ -1010,8 +1056,13 @@ function getTheData() {
 
 //torna alla pagina iniziale  
 $('#dataset-tab').click(function() {
-    window.location = "../";
+    window.location.href = "../";
 });
+$('#hierical-tab').click(function() {
+
+    window.location.href = "../sshier/" + ssid;
+});
+
 
 /*     script che permette di visualizzare un minigrafo
         composto dalla classe cliccata e dalle classi ad essa collegata  */
@@ -1149,6 +1200,7 @@ MiniGraph.prototype.update = function() {
         node2.attr("transform", function(d) {
             return "translate(" + d.x + "," + d.y + ")";
         });
+
     });
 
     // Restart the force layout.
@@ -1371,6 +1423,7 @@ GenerateQuery.prototype.currentNodeChanged = function() {
             } else {
                 a.setted = false
                 a.isInQuery = false
+
             }
             return a;
         }.bind(this))
@@ -1471,6 +1524,8 @@ GenerateQuery.prototype.overNode = function(e, detail, sender) {
     console.log("this.currentnode", this.currentNode);
 }
 
+
+/// nel file di Luca MouseOver è stato tolto... è da testare
 GenerateQuery.prototype.sMouseOver = function(e, detail, sender) {
     // 	    	console.log(e,detail,sender)
     var nodeID = e.detail.nodeID
@@ -1979,7 +2034,7 @@ QueryInterface.prototype.updateQuery = function() {
             .chartFunction("google.visualization.Table")
             .draw(document.getElementById("resultViz"));
     }
-	Q.onFail(function(d){alert("The server is not responding or the request has been blocked for CORS errors");console.log(d)});
+        Q.onFail(function(d){alert("The server is not responding or the request has been blocked for CORS errors");console.log(d)});
     //    this.async(this.getCount);
     console.log("terminata updateQuery")
 }
@@ -2120,7 +2175,7 @@ $("#launchQuery").click(function() {
 
     q.ss = datag;
 
-    //q.proxy = "http://localhost:8891/";
+    //q.proxy = "https://dbgroup.ing.unimore.it/hbold/proxy/";
     q.proxy = "http://localhost:8891/";
     qo.curQCN = gq.curQCN;
     qo.getQuery(); // guarda tesi bernardotti, sembra non definita qui, forse inutile

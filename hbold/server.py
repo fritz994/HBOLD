@@ -135,7 +135,20 @@ class ClusterSchema(tornado.web.RequestHandler):
         print('Creato CS con id ',endpoint_id)
         self.render('cs.html')
 
-
+class SunburstCS(tornado.web.RequestHandler):
+    def get(self,endpoint_id):
+        self.set_header('Content-Type', '') # I have to set this header 
+        #https://stackoverflow.com/questions/17284286/disable-template-processing-in-tornadoweb
+        #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
+        print('Creato CS con id ',endpoint_id)
+        self.render('sunburst.html')
+class CirclePackCS(tornado.web.RequestHandler):
+    def get(self,endpoint_id):
+        self.set_header('Content-Type', '') # I have to set this header 
+        #https://stackoverflow.com/questions/17284286/disable-template-processing-in-tornadoweb
+        #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
+        print('Creato CS con id ',endpoint_id)
+        self.render('circlepack.html')
 class About(tornado.web.RequestHandler):
     def get(self):
         self.set_header('Content-Type', '') # I have to set this header 
@@ -606,7 +619,9 @@ if __name__ == "__main__":
         (r"/hbold/ss/([0-9]+)",SchemaSummary),
         (r"/hbold/sshier/([0-9]+)",HiericalSS),
         (r"/hbold/treecs/([0-9]+)",TreemapCS),
-        (r"/hbold/cs/([0-9]+)",ClusterSchema),
+        (r"/hbold/suncs/([0-9]+)",SunburstCS),
+        (r"/hbold/packcs/([0-9]+)",CirclePackCS),
+		(r"/hbold/cs/([0-9]+)",ClusterSchema),
         (r"/hbold/exploreSS/([0-9]+)",ExploreSS),
         (r"/hbold/insertDataset/", InsertDataset),                            # parte nuova
         (r"/hbold/inserting/([^ ]*)", Inserting),                             # parte nuova
