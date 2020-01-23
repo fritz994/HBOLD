@@ -42,21 +42,6 @@ class SchemaSummary(tornado.web.RequestHandler):
         print('Creato SS con id ',endpoint_id)
         self.render('ss.html')
 
-class HiericalSS(tornado.web.RequestHandler):
-    def get(self,endpoint_id):
-        self.set_header('Content-Type', '') # I have to set this header 
-        #https://stackoverflow.com/questions/17284286/disable-template-processing-in-tornadoweb
-        #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
-        print('Creato SS con id ',endpoint_id)
-        self.render('sshier.html')
-class TreemapCS(tornado.web.RequestHandler):
-    def get(self,endpoint_id):
-        self.set_header('Content-Type', '') # I have to set this header 
-        #https://stackoverflow.com/questions/17284286/disable-template-processing-in-tornadoweb
-        #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
-        print('Creato SS con id ',endpoint_id)
-        self.render('treemap.html')
-
 
 # classe che viene chiamata quando si espande il cluster schema
 class ExploreSS(tornado.web.RequestHandler):
@@ -73,21 +58,6 @@ class ClusterSchema(tornado.web.RequestHandler):
         #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
         print('Creato CS con id ',endpoint_id)
         self.render('cs.html')
-
-class SunburstCS(tornado.web.RequestHandler):
-    def get(self,endpoint_id):
-        self.set_header('Content-Type', '') # I have to set this header 
-        #https://stackoverflow.com/questions/17284286/disable-template-processing-in-tornadoweb
-        #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
-        print('Creato CS con id ',endpoint_id)
-        self.render('sunburst.html')
-class CirclePackCS(tornado.web.RequestHandler):
-    def get(self,endpoint_id):
-        self.set_header('Content-Type', '') # I have to set this header 
-        #https://stackoverflow.com/questions/17284286/disable-template-processing-in-tornadoweb
-        #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
-        print('Creato CS con id ',endpoint_id)
-        self.render('circlepack.html')
 
 
 class About(tornado.web.RequestHandler):
@@ -218,12 +188,12 @@ class Inserting(tornado.web.RequestHandler):
             server.ehlo()  # Can be omitted
             server.login(sender_email, password)
             server.sendmail(sender_email, receiver_email, message)
- 
+
         print("Mail inviata con successo a " + receiver_email) 
-         
- 
- 
- 
+
+
+
+
 # classe associata all'url ./getDataSS/id, crea lo Schema Summary del dataset selezionato
 # utilizza la collection ike del mongoDB
 # chunk si ottiene dalla funzione createSS che si trova a riga 330 circa
@@ -233,19 +203,19 @@ class DataHandlerSS(tornado.web.RequestHandler):
         db = self.settings['db']
         db.lodex.ike.find_one({'_id': int(endpoint_id)},
                               callback=self._on_response)
- 
- 
+
+
     def _on_response(self, response, error):
         ss = response['ss']                         # ss ora contiene il JSON con attributes,nodes,edges,... del campo ss nel MongoDB del dataset corrispondente
                                                     # (come viene costruito il JSON? con la query? metodo response? response è una stringa?)
- 
+
         ss.update(
             {'name': response['name'], 'id': response['_id'], 'uri': response['uri']})          # viene aggiunto nome,id,uri IN CODA al JSON del dataset
         chunk = createSS(ss)
         self.write(chunk)
         self.finish()
- 
- 
+
+
 #classe associata all'url /getDataCS
 # con la nuova versione il CS lo ottengo leggendo direttamente i dati da MongoDB
 class DataHandlerCS(tornado.web.RequestHandler):
@@ -254,28 +224,28 @@ class DataHandlerCS(tornado.web.RequestHandler):
         db = self.settings['db']
         db.lodex.ike.find_one({'_id': int(endpoint_id)},
                               callback=self._on_response)
- 
+
     def _on_response(self, response, error):
-        cs = response['css']
+        cs = response['cs']
         cs.update(
             {'title': response['name'], 'id': response['_id'], 'uri': response['uri']})
         #chunk = createSS(ss, isCluster=True)                   istruzione dal vecchio codice
         self.write(cs)
         self.finish()
- 
- 
+
+
 
 # sembra che il software funzioni lo stesso senza IntensionalDataHandler
 class IntensionalDataHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
     def get(self, s):
- 
+
         id = self.get_argument("id", None)
- 
+
         db.lodex.ike.find_one({'_id': int(id)}, callback=self._on_response)
- 
+
     def _on_response(self, response, error):
- 
+
         if error:
             raise tornado.web.HTTPError(500)
         obj = []
@@ -311,14 +281,14 @@ class IntensionalDataHandler(tornado.web.RequestHandler):
         for a in ik:
             nodes.add(a['s'])
             nodes.add(a['o'])
- 
+
         for clas in nodes:
             vocab.add(extractVocab(clas))
             node.append({'name': extrValue(clas), 'fullname': clas,
                          'vocab': extractVocab(clas)})
             invNode[clas] = index
             index += 1
- 
+
         edges = []
         #         pprint.pprint(response["properties"])
         for prop in ik:
@@ -336,7 +306,7 @@ class IntensionalDataHandler(tornado.web.RequestHandler):
                                   'label': [{
                                       'name': extrValue(prop['p']),
                                       'vocab': extractVocab(prop['p'])}]})
- 
+
                     #         pprint.pprint({'nodes':node,'links':edges})
                     #
                     #         pprint.pprint(vocab)
@@ -345,8 +315,8 @@ class IntensionalDataHandler(tornado.web.RequestHandler):
         self.write(
             {'nodes': node, 'links': edges, 'vocab': list(vocab), 'title': response['name'], 'id': response['_id']})
         self.finish()
- 
- 
+
+
 def extractVocab(uri):
     if len(uri.rsplit('/')[-1].split(':')) > 1:
         return ':'.join(uri.rsplit(':')[:-1])
@@ -354,8 +324,8 @@ def extractVocab(uri):
         return '#'.join(uri.rsplit('#')[:-1])
     else:
         return '/'.join(uri.rsplit('/')[:-1])
- 
- 
+
+
 def extrValue(uri):
     if len(uri.rsplit('/')[-1].split(':')) > 1:
         return uri.rsplit(':')[-1]
@@ -363,7 +333,7 @@ def extrValue(uri):
         return uri.rsplit('#')[-1]
     else:
         return uri.rsplit('/')[-1]
- 
+
 # funzione che costruisce lo SS al momento della pressione di uno dei pulsanti
 def createSS(ss, isCluster=False):
     node = []
@@ -371,14 +341,14 @@ def createSS(ss, isCluster=False):
     index = 0
     vocab = set('/'.join(a['p'].rsplit('/')[:-1]) for a in ss['attributes'])            #vocab è l'insieme degli http da cui si prendono i dati
     attributes = {}
- 
+
     for att in ss['attributes']:
         #             vocab.add('/'.join(att['p'].rsplit('/')[:-1])
         if att['c'] not in attributes:
             attributes[att['c']] = [{'n': int(att['n']), 'p': att['p']}]
         else:
             attributes[att['c']].append({'n': int(att['n']), 'p': att['p']})            # attributes è un JSON formato dalle classi, e per ogni classe sono riportati gli attributi (campo p nel MongoDB)
- 
+
     for clas in ss['nodes']:
         vocab.add(extractVocab(clas['c']))                                              # extrVocab e extrValue sono funzioni definite sopra
         att = []
@@ -560,10 +530,6 @@ if __name__ == "__main__":
         (r"/hbold/getDataCS/([0-9]+)", DataHandlerCS),
         (r"/hbold/about", About),
         (r"/hbold/ss/([0-9]+)",SchemaSummary),
-        (r"/hbold/sshier/([0-9]+)",HiericalSS),
-        (r"/hbold/treecs/([0-9]+)",TreemapCS),
-        (r"/hbold/suncs/([0-9]+)",SunburstCS),
-        (r"/hbold/packcs/([0-9]+)",CirclePackCS),
         (r"/hbold/cs/([0-9]+)",ClusterSchema),
         (r"/hbold/exploreSS/([0-9]+)",ExploreSS),
         (r"/hbold/insertDataset/", InsertDataset),                            # parte nuova

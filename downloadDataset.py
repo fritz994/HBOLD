@@ -28,17 +28,17 @@ def downloadDataset(argv):
         #print("Extraction endpoints")
         results = sparql.queryAndConvert()
         #print("Parsing results\n")
-        #pprint(results)
-        #pprint(se.parseResponseForDatasetExtr(None, results, "test_connection", False))
-        #print("-----")
+        pprint(results)
+        pprint(se.parseResponseForDatasetExtr(None, results, "test_connection", False))
+        print("-----")
+
+        return
 
         if se.parseResponseForDatasetExtr(None, results, "test_connection", False):
             endArr = []
             endDIct = {}
 
-            cont = 0
-            for end in se.parseResponseForDatasetExtr(None, results, "test_connection", False):                    # end <C3><A8> un oggetto con 'dataset', 'title' e 'url' dell'endpoint
-                end["url"] = end["url"].split("?")[0]
+            for end in se.parseResponseForDatasetExtr(None, results, "test_connection", False):                    # end è un oggetto con 'dataset', 'title' e 'url' dell'endpoint
                 if 'title' in end:
                     if end['url'] in endDIct:
                         tmp=endDIct[end['url']]
@@ -46,7 +46,7 @@ def downloadDataset(argv):
                         endDIct[end['url']] = tmp
                     else:
                         endDIct[end['url']] = {'name':[end['title']]}
-                cont += 1
+
             datasets = []
             urls = []
             count = mongo.getLastIdEndpointsLodex()
@@ -70,10 +70,8 @@ def downloadDataset(argv):
 
             # Stringa per il parsing
             print("Ricerca di nuovi dataset sul portale " + argv[0])
-            print(cont)
             print("Trovati "+str(len(datasets))+" nuovi datasets")
             print(datasets)
-            return
             if len(datasets) > 0:
                 mongo.inserLodexDatasets(datasets)
                 for i in range(0, len(datasets)):
@@ -88,7 +86,7 @@ def downloadDataset(argv):
         id = mongo.startTestNew(url)
         print(id)
 
-        """in runInfo, id <C3><A8> il numero dentro a ObjectId"""
+        """in runInfo, id è il numero dentro a ObjectId"""
         copy = False
         count = mongo.getLastIdEndpointsLodex()
         datasets = []
@@ -106,13 +104,14 @@ def downloadDataset(argv):
                 datasets.append(ds)
             else:
                 print("-----")
-                print(url + " is a valid endpoint but it is already present on our server.")
-                print("The extraction has not been performed.")
+                print(url + " e' un endpoint valido, ")
+                print("ma e' gia' presente in MongoDB; non lo aggiungo.")
+                print("L'estrazione viene evitata in quanto sarebbe inutile.")
 
         else:
             print("-----")
-            print(url + " it is not a valid endpoint or it is not reachable at the moment. Retry later.")
-            print("Extraction failed.")
+            print(url + " non e' un endpoint valido o non e' al momento raggiungibile.")
+            print("Estrazione fallita.")
 
         if len(datasets) > 0:
             mongo.inserLodexDatasets(datasets)
@@ -120,8 +119,9 @@ def downloadDataset(argv):
             print(datasets)
             automaticExtraction([argv[0]])
             print("-----")
-            print(url + " is a valid endpoint and it is not present on our server.")
-            print("Extraction ended correctly.")
+            print(url + " e' un endpoint valido, ")
+            print("non presente su MongoDB; lo aggiungo.")
+            print("Estrazione andata a buon fine.")
 
 def main(argv):
     for portal in ["https://www.europeandataportal.eu/sparql", "https://io.datascience-paris-saclay.fr/sparql", "http://data.europa.eu/euodp/sparqlep"]:

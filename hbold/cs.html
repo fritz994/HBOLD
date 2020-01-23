@@ -12,43 +12,108 @@
 			display: none;
 			height: 60px
 		}
+		.navbar-brand {
+	display: inline-block;
+	padding-top: .3125rem;
+	padding-bottom: .3125rem;
+	margin-right: 1rem;
+	margin-left: 1rem;
+	font-size: 2rem;
+	height: 50px;
+	line-height: 35px;
+	white-space: nowrap;
+}
+#refer{
+	text-align: center;
+}
+#refer ul {
+	text-align:center;
+	width: 100%;
+
+}
+#refer ul li {
+    display:inline-block;
+    position: relative;
+    /* float: left; */
+    height: auto;
+    width: 150px;
+    padding: 0;
+    margin:0 60px;
+    text-align: center;
+
+}
 	</style>
 {% end %}
 
 {% block content %}
 	
 		<!-- Barra Iniziale -->
+		
 		<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
 			<div class="container">
 				<ul class="nav navbar-nav" id="myTab" role="tablist">
 					<form class="form-inline my-2 my-lg-0">
-					  <div id="myNav" class="overlay" syle>
-						  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-						  <div class="overlay-content">
-							<a href="../about">About</a>
-							<a href="../insertDataset/">Dataset Insertion</a>
-						  </div>
+						<div id="myNav" class="overlay" style>
+							<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+							<div class="overlay-content">
+								<a href="/hbold/about">About</a>
+								<a href="/hbold/insertDataset">Dataset Insertion</a>
+							</div>
 						</div>
 					</form>
-						<div id="main">
-							<span style="font-size:30px;cursor:pointer" onclick="openNav()" class="btn3 fa fa-bars" role="button"></span>
-						  </div>
-						
+					<div id="main">
+						<span style="font-size:30px;cursor:pointer" onclick="openNav()" class="btn3 fa fa-bars" role="button"></span>
+					</div>
 					<li class="nav-item">
-						<a class="navbar-brand nav-link active " id="dataset-tab" data-toggle="tab" href="#dataset" role="tab" aria-controls="home"
+						<a class="navbar-brand nav-link active" id="dataset-tab" data-toggle="tab" href="#dataset" role="tab" aria-controls="home"
 							aria-selected="true">H-Bold
-							<span class="sr-only">(current)</span>
+						<span class="sr-only">(current)</span>
 						</a>
 					</li>
 					<li class="nav-item">
-						<a class="navbar-brand nav-link" id="graph-tab" data-toggle="tab" href="#graph" role="tab" aria-controls="profile" aria-selected="false">Cluster Schema</a>
+						<a class="navbar-brand nav-link"  data-toggle="tab" href="#graph" role="tab" aria-controls="profile" aria-selected="false">Cluster Schema</a>
 					</li>
-					
+				
+					<!--
+						<li class="nav-item">
+							<a class="navbar-brand nav-link" id="query-tab" data-toggle="tab" href="#query" role="tab" aria-controls="contact" aria-selected="false">Query Panel</a>
+						</li>
+						-->
 				</ul>
-					
 			</div>
 		</nav>
-
+		<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark" style="margin-top: 70px;"> 
+			<div class="container" id="refer">
+	
+				<ul class="nav navbar-nav" id="myTab" role="tablist" >
+				   
+					<li class="nav-item">
+						<a class="navbar-brand nav-link active" id="graph-tab" data-toggle="tab" href="#graph" role="tab" aria-controls="profile" aria-selected="false">Graph</a>
+					</li>
+					<li class="nav-item">
+                        <a class="navbar-brand nav-link" id="treemapCS" data-toggle="tab" href="#treemap" role="tab" aria-controls="profile" aria-selected="false">TreeMapCS</a>
+					</li>
+					<li class="nav-item">
+						<a class="navbar-brand nav-link" id="sunCS" data-toggle="tab" href="#hierical" role="tab"
+							aria-controls="profile" aria-selected="false">Sunburst
+							
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="navbar-brand nav-link" id="packCS" data-toggle="tab" href="#hierical" role="tab"
+							aria-controls="profile" aria-selected="false">CirclePack
+							<span class="sr-only">(current)</span>
+						</a>
+					</li>
+				   
+					<!--
+						<li class="nav-item">
+							<a class="navbar-brand nav-link" id="query-tab" data-toggle="tab" href="#query" role="tab" aria-controls="contact" aria-selected="false">Query Panel</a>
+						</li>
+						-->
+				</ul>
+			</div>
+		</nav>
 		<!-- PARTE VECCHIA
 		<div class="row">
 			<div class="col-lg-8" id="chart" role="tabpanel" aria-labelledby="graph-tab">
@@ -66,7 +131,7 @@
 		<div class="row no-gutters">
 				<div class="col-lg-4 box" style="background-color: #e9ecef;
 												 position: fixed;
-												 top: 0px;
+												 top: 140px;
 												 bottom: 0px;
 												 padding-top: 70px;
 												 height: 100%;
@@ -94,7 +159,7 @@
 
 			<div class="row no-gutters">
 
-				<div class="col-lg-8 offset-lg-4" id="chart"></div>
+				<div class="col-lg-8 offset-lg-4" id="chart" style="margin-top: 70px;"></div>
 			</div>
 
 			<!--<div class="tab-pane fade" id="query" role="tabpanel" aria-labelledby="query-tab">...</div>-->
@@ -111,6 +176,6 @@
 {% end %}
 
 {% block additional_js %}
-		<script src="../js/cs.js"></script>
+		<script src="../js/cs.js"></script> 
 {% end %}
     

@@ -2320,7 +2320,6 @@
                     qr = queryResult;
                 } else {
                     qr = sendQuery();
-					console.log(qr);
                     qr.fail(
                         function (xhr, textStatus, thrownError) {
                             logger.log("Error: A '" + textStatus + "' occurred in Query.saveQueryResults()");

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+    integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css" />
+{% block additional_css %}
+
+<link rel="stylesheet" type="text/css" href="../css/sunburst.css">
+
+
+
+{% end %}
+<style>
+
+#refer{
+	text-align: center;
+}
+#refer ul {
+	text-align:center;
+	width: 100%;
+
+}
+#refer ul li {
+    display:inline-block;
+    position: relative;
+    /* float: left; */
+    height: auto;
+    width: 150px;
+    padding: 0;
+    margin:0 60px;
+    text-align: center;
+
+}
+
+
+
+
+</style>
+
+<body>
+
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <ul class="nav navbar-nav" id="myTab" role="tablist">
+              
+                <div id="main">
+                    <span style="font-size:30px;cursor:pointer" onclick="openNav()" class="btn3 fa fa-bars" role="button"></span>
+                </div>
+                <li class="nav-item">
+                    <a class="navbar-brand nav-link " id="dataset-tab" data-toggle="tab" href="#dataset" role="tab" aria-controls="home"
+                        aria-selected="true">H-Bold
+                    <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="navbar-brand nav-link active"  data-toggle="tab" href="#graph" role="tab" aria-controls="profile" aria-selected="false">Cluster Schema</a>
+                </li>
+            
+                <!--
+                    <li class="nav-item">
+                        <a class="navbar-brand nav-link" id="query-tab" data-toggle="tab" href="#query" role="tab" aria-controls="contact" aria-selected="false">Query Panel</a>
+                    </li>
+                    -->
+            </ul>
+        </div>
+    </nav>
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark" style="margin-top: 70px;"> 
+        <div class="container" id="refer">
+
+            <ul class="nav navbar-nav" id="myTab" role="tablist" >
+               
+                <li class="nav-item">
+                    <a class="navbar-brand nav-link " id="graph-tab" data-toggle="tab" href="#graph" role="tab" aria-controls="profile" aria-selected="false">Graph</a>
+                </li>
+                <li class="nav-item">
+                    <a class="navbar-brand nav-link" id="treemapCS" data-toggle="tab" href="#treemap" role="tab" aria-controls="profile" aria-selected="false">TreeMapCS</a>
+                </li>
+                <li class="nav-item">
+                    <a class="navbar-brand nav-link active" id="sunCS" data-toggle="tab" href="#hierical" role="tab"
+                        aria-controls="profile" aria-selected="false">Sunburst
+                        
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="navbar-brand nav-link " id="packCS" data-toggle="tab" href="#hierical" role="tab"
+                        aria-controls="profile" aria-selected="false">CirclePack
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+               
+                <!--
+                    <li class="nav-item">
+                        <a class="navbar-brand nav-link" id="query-tab" data-toggle="tab" href="#query" role="tab" aria-controls="contact" aria-selected="false">Query Panel</a>
+                    </li>
+                    -->
+            </ul>
+        </div>
+    </nav>
+    <div class="row no-gutters">
+        <div class="col-lg-2 box" style="background-color: #e9ecef;
+                       position: fixed;
+                       top: 140px;
+                       bottom: 0px;
+                       padding-top: 70px;
+                       height: 100%;
+                       border-right: 10px solid rgba(0, 0, 0, 0.1);
+                       background-clip: padding-box;
+                       ">
+            <div class="header">
+                <div class="jumbotron jumbotron-fluid" style="padding: 10px 10px; margin: 0px">
+                    <div class="row no-gutters">
+                        <div class="col">
+                            <p class="lead">From <span class="graph-title"></span></p>
+                        </div>
+                    </div>
+                    <h2><button class="btn btn-secondary btn-info" id="goToSS">Create Schema Summary</button></h2>
+                </div>
+            </div>
+            <div class="container content">
+                <div class="tab-content" id="classes" role="tabpanel" aria-labelledby="graph-tab"></div>
+            </div>
+        </div>
+        <div id="chart"></div>
+    </div>
+
+
+
+
+
+    <script src="//d3js.org/d3.v5.min.js"></script>
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    {% block additional_js %}
+		<script src="../js/sunburst.js"></script> 
+{% end %}
+        

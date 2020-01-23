@@ -19,7 +19,6 @@ method_requests_mapping = {
 
 @app.route('/<path:url>', methods=method_requests_mapping.keys())
 def proxy(url):
-    import pdb;pdb.set_trace()
     requests_function = method_requests_mapping[flask.request.method]
     request = requests_function(url, stream=True, params=flask.request.args)
 
@@ -29,13 +28,13 @@ def proxy(url):
                               content_type=request.headers['content-type'],
                               status=request.status_code)
 
+    print(response)
+
     if flask.request.environ['HTTP_ORIGIN'] is not None:
         response.headers['Access-Control-Allow-Origin'] = flask.request.environ['HTTP_ORIGIN']
     else:
         response.headers['Access-Control-Allow-Origin'] = '*'
 	#response.headers['Access-Control-Allow-Origin'] = 'http://127.0.0.1:8891'
-
-
     return response
 
 
