@@ -73,14 +73,15 @@ class proxy(tornado.web.RequestHandler):
     def get(self, url):
         #url tagliato dopo il carattere ? quindi lo prendo da request
         url = self.request.uri[1:]
+        print(url)
 
-        if not url.startswith("http://") or not url.startswith("https://"):
+        if not (url.startswith("http://") or url.startswith("https://")):
             if url.startswith("http"):
                 url = url.replace("http:/","http://")
             elif url.startswith("https"):
                 url = url.replace("https:/","https://")
 			
-		sparql_request = tornado.httpclient.HTTPRequest(url=url, headers={"Accept":"application/sparql-results+json", "charset":"UTF-8"})
+        sparql_request = tornado.httpclient.HTTPRequest(url=url, headers={"Accept":"application/sparql-results+json", "charset":"UTF-8"})
 
         http_client = AsyncHTTPClient()
         response = yield http_client.fetch(sparql_request)

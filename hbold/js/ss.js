@@ -1058,7 +1058,7 @@ function getTheData() {
 $('#dataset-tab').click(function() {
     window.location.href = "../";
 });
-$('#hierical-tab').click(function() {
+$('#hierarchical-tab').click(function() {
 
     window.location.href = "../sshier/" + ssid;
 });
@@ -2175,8 +2175,9 @@ $("#launchQuery").click(function() {
 
     q.ss = datag;
 
-    //q.proxy = "https://dbgroup.ing.unimore.it/hbold/proxy/";
-    q.proxy = "http://localhost:8891/";
+    q.proxy = "http://apollo-new.ing.unimore.it:8891/";
+    //q.proxy = "https://dbgroup.ing.unimore.it/";
+    //q.proxy = "http://localhost:8891/";
     qo.curQCN = gq.curQCN;
     qo.getQuery(); // guarda tesi bernardotti, sembra non definita qui, forse inutile
     q.ready(); // riga 2840, non nominata nella tesi, NECESSARIO
