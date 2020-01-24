@@ -73,7 +73,6 @@ def downloadDataset(argv):
             print(cont)
             print("Trovati "+str(len(datasets))+" nuovi datasets")
             print(datasets)
-            return
             if len(datasets) > 0:
                 mongo.inserLodexDatasets(datasets)
                 for i in range(0, len(datasets)):

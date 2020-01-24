@@ -152,19 +152,20 @@ class QueryGenerator:
         return Query(("SELECT ?c count(?s) "),(queryBody),['?c','?no'])
 
     #download EuropeanDataPortal endpoint
-    def EuDownload(self):
+    # funziona ed è corretta ma si perde molti link con il controllo ?format ?is 'SPARQL'
+    def EuDownload_new(self):
         return Query(("SELECT ?dataset ?title ?url "),(" WHERE {?dataset a dcat:Dataset. ?dataset <http://purl.org/dc/terms/title> ?title. ?dataset dcat:distribution ?distribution. ?distribution <http://purl.org/dc/terms/format> ?format. ?format ?is 'SPARQL'. ?distribution dcat:accessURL ?url.}"),[])
+		
+    def EuDownload(self):
+        return Query(("PREFIX dcat: <http://www.w3.org/ns/dcat#> PREFIX  dc: <http://purl.org/dc/terms/>"),("SELECT ?dataset ?title ?url WHERE {?dataset a dcat:Dataset. ?dataset <http://purl.org/dc/terms/title> ?title. ?dataset dcat:distribution ?distribution. ?distribution dcat:accessURL ?url. filter(regex(?url, 'sparql')).}"),[])
     
     #dowload DataScienceParis endpoint
     def dataScienceParisDownload(self):
-        return Query(("PREFIX dcat: <http://www.w3.org/ns/dcat#> PREFIX  dc: <http://purl.org/dc/terms/> "),("SELECT ?dataset ?title ?url WHERE {?dataset a dcat:Dataset. ?dataset dc:title ?title. ?dataset dcat:distribution ?distribution. ?distribution dcat:mediaType 'application/sparql-results+xml'. ?distribution dcat:accessURL ?url.}"),[])
+        return Query(("PREFIX dcat: <http://www.w3.org/ns/dcat#> PREFIX  dc: <http://purl.org/dc/terms/>"),("SELECT ?dataset ?title ?url WHERE {?dataset a dcat:Dataset. ?dataset dc:title ?title. ?dataset dcat:distribution ?distribution. ?distribution dcat:accessURL ?url. filter(regex(?url, 'sparql')).}"),[])
 
-    #dowload DataScienceParis endpoint
-    def dataEuDownload_old(self):
-        return Query(("PREFIX dcat: <http://www.w3.org/ns/dcat#> PREFIX odp: <http://data.europa.eu/euodp/ontologies/ec-odp#> PREFIX dc: <http://purl.org/dc/terms/> "),("SELECT ?datasetURI ?title ?url WHERE { {graph ?Graph {?datasetURI a dcat:Dataset. ?datasetURI dc:title ?title. ?datasetURI dcat:distribution ?o. ?o odp:distributionFormat ?format. ?o dcat:accessURL ?url FILTER(regex(?format, 'application/sparql-query' , 'i'))  } } UNION {graph ?Graph {?datasetURI a dcat:Dataset. ?datasetURI dc:title ?title. ?datasetURI dcat:distribution ?o. ?o odp:distributionFormat ?format. ?o dcat:accessURL ?url FILTER(regex(?format, 'webservice/sparql' ,'i'))  } } }"),[])
-
+    #dowload DataEuropa endpoint
     def dataEuDownload(self):
-        return Query(("PREFIX dcat: <http://www.w3.org/ns/dcat#> PREFIX odp: <http://data.europa.eu/euodp/ontologies/ec-odp#> PREFIX dc: <http://purl.org/dc/terms/> "),("SELECT ?datasetURI ?title ?url WHERE { ?datasetURI a dcat:Dataset. ?datasetURI dc:title ?title. ?datasetURI dcat:distribution ?o .?o dcat:downloadURL ?url. filter(regex(?url, 'sparql')) } "),[])
+        return Query(("PREFIX dcat: <http://www.w3.org/ns/dcat#> PREFIX dc: <http://purl.org/dc/terms/>"),("SELECT ?datasetURI ?title ?url WHERE { ?datasetURI a dcat:Dataset. ?datasetURI dc:title ?title. ?datasetURI dcat:distribution ?o .?o dcat:accessURL ?url. filter(regex(?url, 'sparql')) } "),[])
 
     
 ####################
