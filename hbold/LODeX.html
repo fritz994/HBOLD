@@ -73,13 +73,13 @@ body {
         <div class="tab-pane fade show active" id="dataset" role="tabpanel" aria-labelledby="dataset-tab">
             <table class="table table-hover" id="myTable">
                 <thead>
-                    <tr class="tr-fixed">
-                        <th> <a>Dataset Name</a></th>
-                        <th> <a>Triples</a></th>
-                        <th> <a>Class Number</a></th>
-                        <th> <a>Properties Number</a> </th>
-                        <th> <a>Instance Number</a> </th>
-                        <th>Azioni</th>
+                    <tr align="center">
+                        <th align="left"> Dataset Name </th>
+                        <th> <a align="right"> Triples </a> </th>
+                        <th> <a align="right"> Classes </a> </th>
+                        <th> <a align="right"> Properties</a> </th>
+                        <th> <a align="right"> Instances </a> </th>
+                        <th> <a align="right"> Actions </a> </th>
                     </tr>
                 </thead>
 
@@ -136,15 +136,15 @@ body {
         {{#each data}}
         <tr>
             <!-- serie di <td> che inseriscono i vari campi dei dataset -->
-            <td> {{name}} </td>
-            <td> {{triples}} </td>
-            <td> {{classesCount}} </td>
-            <td> {{propCount}} </td>
-            <td> {{instances}} </td>
+            <td align="left"> {{name}} </td>
+            <td align="right"> {{triples}} </td>
+            <td align="right"> {{classesCount}} </td>
+            <td align="right"> {{propCount}} </td>
+            <td align="right"> {{instances}} </td>
 
 
             <!-- <td> che inserisce i bottoni di SS e CS -->
-            <td>
+            <td align="right">
                 <div class="btn-group" role="group" aria-label="Basic example">
                     <button type="button" class="ssbtn btn btn-success" data-id="{{ id }}">SS</button>
                     <button type="button" class="csbtn btn btn-danger" data-id="{{ id }}">CS</button>
