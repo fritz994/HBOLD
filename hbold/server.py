@@ -12,6 +12,8 @@ import time
 from downloadDataset import downloadDataset as dd
 import SchemaExtractorTestV3
 
+from time import time, ctime
+
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
@@ -37,10 +39,15 @@ annoying_ip={}
 def check_ip(func):
     def function_wrapper(self, url):
 	    #controllo che un ip non faccia più di 10 chiamate al minuto
-        ip = self.request.remote_ip
-        now = time.time()
+        import pbb;pdb.set_trace()
+        #ip = self.request.remote_ip
+        ip = self.request.headers["X-Forward-for"]
+        now = time()
         to_return = "OK"
-		
+
+        with open("log_richieste.txt", "a") as so:
+            so.write(f"{ctime(now)} --- {ip} --- {self.request.uri.split('hbold/proxy/')[1]}")
+
         if ip not in annoying_ip.keys():
             annoying_ip[ip] = list()
             annoying_ip["count"] = 0
@@ -72,7 +79,8 @@ class proxy(tornado.web.RequestHandler):
     @gen.coroutine
     def get(self, url):
         #url tagliato dopo il carattere ? quindi lo prendo da request
-        url = self.request.uri[1:]
+        #url = self.request.uri[1:]
+        url = self.request.uri.split("hbold/proxy/")[1]
         print(url)
 
         if not (url.startswith("http://") or url.startswith("https://")):
@@ -80,7 +88,7 @@ class proxy(tornado.web.RequestHandler):
                 url = url.replace("http:/","http://")
             elif url.startswith("https"):
                 url = url.replace("https:/","https://")
-			
+
         sparql_request = tornado.httpclient.HTTPRequest(url=url, headers={"Accept":"application/sparql-results+json", "charset":"UTF-8"})
 
         http_client = AsyncHTTPClient()
@@ -633,7 +641,7 @@ if __name__ == "__main__":
         (r"/hbold/exploreSS/([0-9]+)",ExploreSS),
         (r"/hbold/insertDataset/", InsertDataset),                            # parte nuova
         (r"/hbold/inserting/([^ ]*)", Inserting),                             # parte nuova
-        (r"/(.*)$", proxy),
+        (r"/hbold/proxy/(.*)$", proxy),
       #  (r"/lodex2/query", QueryDataHandler)
     ],
         static_path=os.path.join(os.path.dirname(__file__), "static"), db=db, autoreload=True, debug=True)

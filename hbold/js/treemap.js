@@ -200,10 +200,7 @@ function sumBySize(d) {
 
 
 
-//la visualizzazione richiede una gerarchia. Non avendola a disposizione ne ho creata una io
-//In pratica un nodo è padre di un altro se tra i due è presente un link che ha come source il primo, e come target il secondo
-//Nella visualizzazione si può verificare che un nodo è sia padre che figlio di un altro nodo, in quel caso il colore del link sarà verde,
-//mentre la label rossa. Questo è di default, ma ho valutato che sia una soluzione buona per il caso specifico.
+
 function change(data){ 
   var children=[]; 
   var nephew=[];
