@@ -56,7 +56,7 @@ $.ajax({
             .attr("dy", "0.3em")
             .text(function (d) { return d.data.name.substring(0, d.r / 3); });
             svg.attr("viewBox", autoBox);
-    
+
             $('#goToSS').click(function () {
                 var nodesSelected = new Object();
                 var j = 0;
