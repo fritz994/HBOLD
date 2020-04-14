@@ -273,9 +273,9 @@ class Inserting(tornado.web.RequestHandler):
  
         port = 587  # For starttls
         smtp_server = "smtp.gmail.com"
-        sender_email = "hboldprova2@gmail.com"
+        sender_email = "email-address"
         receiver_email = mail
-        password = "123.stella"
+        password = "email-address-password"
         msg = MIMEMultipart('alternative')
 		
         if endp != "":
