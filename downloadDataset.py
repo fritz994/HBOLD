@@ -13,6 +13,7 @@ from xml.dom.minidom import parseString
 
 
 def downloadDataset(argv):
+    print(argv)
     if argv[0] in ["https://www.europeandataportal.eu/sparql", "https://io.datascience-paris-saclay.fr/sparql", "http://data.europa.eu/euodp/sparqlep"]:
         sparql = SPARQLWrapper(argv[0])
         q = util.queryGenerator.QueryGenerator()
@@ -91,12 +92,15 @@ def downloadDataset(argv):
         copy = False
         count = mongo.getLastIdEndpointsLodex()
         datasets = []
+        name = ""
 
         if se.testConnection(url, q, sparql, id):
             endpoint = mongo.getAllEndopoinLodex()
             for e in endpoint:
                 if e["url"] == url:
+                    name = e["name"]
                     copy = True
+                    break
 
             if copy == False:
                 ds = {}
@@ -105,7 +109,7 @@ def downloadDataset(argv):
                 datasets.append(ds)
             else:
                 print("-----")
-                print(url + " is a valid endpoint but it is already present on our server.")
+                print(url + " is a valid endpoint but it is already present on our server with the followint name: " + name)
                 print("The extraction has not been performed.")
 
         else:
