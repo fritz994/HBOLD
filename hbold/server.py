@@ -38,10 +38,10 @@ exclusion = []
 annoying_ip={}
 def check_ip(func):
     def function_wrapper(self, url):
-	    #controllo che un ip non faccia più di 10 chiamate al minuto
-        import pbb;pdb.set_trace()
+	#controllo che un ip non faccia più di 10 chiamate al minuto
+        #import pbb;pdb.set_trace()
         #ip = self.request.remote_ip
-        ip = self.request.headers["X-Forward-for"]
+        ip = self.request.headers["X-Forwarded-For"]
         now = time()
         to_return = "OK"
 
@@ -73,21 +73,26 @@ def check_ip(func):
             return func(self, url)
     return function_wrapper
 
+def correct_url(url):
+    if not ((url.startswith("http://") or url.startswith("https://"))):
+        if url.startswith("https"):
+            url = url.replace("https:/","https://")
+        elif url.startswith("http"):
+            url = url.replace("http:/","http://")
+    return url
+
 
 class proxy(tornado.web.RequestHandler):
     @check_ip
     @gen.coroutine
     def get(self, url):
+        print(url)
         #url tagliato dopo il carattere ? quindi lo prendo da request
         #url = self.request.uri[1:]
         url = self.request.uri.split("hbold/proxy/")[1]
         print(url)
 
-        if not (url.startswith("http://") or url.startswith("https://")):
-            if url.startswith("http"):
-                url = url.replace("http:/","http://")
-            elif url.startswith("https"):
-                url = url.replace("https:/","https://")
+        url = correct_url(url)
 
         sparql_request = tornado.httpclient.HTTPRequest(url=url, headers={"Accept":"application/sparql-results+json", "charset":"UTF-8"})
 
@@ -158,6 +163,7 @@ class SunburstCS(tornado.web.RequestHandler):
         #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
         print('Creato CS con id ',endpoint_id)
         self.render('sunburst.html')
+
 class CirclePackCS(tornado.web.RequestHandler):
     def get(self,endpoint_id):
         self.set_header('Content-Type', '') # I have to set this header 
@@ -165,6 +171,7 @@ class CirclePackCS(tornado.web.RequestHandler):
         #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
         print('Creato CS con id ',endpoint_id)
         self.render('circlepack.html')
+
 class About(tornado.web.RequestHandler):
     def get(self):
         self.set_header('Content-Type', '') # I have to set this header 
@@ -196,8 +203,8 @@ class IndexDatasetHandler(tornado.web.RequestHandler):
         self.write({'data': res})            # scrive su ./index il JSON dei dataset trovati
                                              # cambiando res non funziona più nulla ----> legame tra index e la home?
         self.finish()
- 
- 
+
+
 #associata a ./indexComplete
 class IndexDatasetHandlerFull(tornado.web.RequestHandler):
     @tornado.web.asynchronous
@@ -223,8 +230,8 @@ class IndexDatasetHandlerFull(tornado.web.RequestHandler):
         self.write({'data': res})
         print(len(res))
         self.finish()
- 
- 
+
+
 class GraphHandler(tornado.web.RequestHandler):
     def get(self, endpoint_id):
         self.render('insertDataset.html')
@@ -253,6 +260,11 @@ class Inserting(tornado.web.RequestHandler):
         p2 = "https://io.datascience-paris-saclay.fr/sparql"
         p3 = "http://data.europa.eu/euodp/sparqlep"
 
+
+        print(endp)
+        endp = correct_url(endp)
+        print(endp)
+
         with open('fileMail', 'w') as fo:                                               # redirigo l'output di downloadDataset in un file
             with redirect_stdout(fo):                                                   # il cui contenuto finirà nella mail da mandare (rendere più chiaro il contenuto)
                 if endp != "":
@@ -263,21 +275,21 @@ class Inserting(tornado.web.RequestHandler):
                     dd([p2])
                 if c3 == "1":
                     dd([p3])
- 
+
         with open('fileMail', 'r') as file:
             data = file.read()
- 
+
         trash, printline = itemgetter(0, 1)(data.split('-----', 1))
 
-        print("inviando la mail...")
- 
+        print("sending the email...")
+
         port = 587  # For starttls
         smtp_server = "smtp.gmail.com"
         sender_email = "email-address"
         receiver_email = mail
-        password = "email-address-password"
+        password = "password"
         msg = MIMEMultipart('alternative')
-		
+
         if endp != "":
             msg["Subject"] = "H-BOLD: Extraction result"
             msg["To"] = receiver_email
@@ -287,7 +299,7 @@ class Inserting(tornado.web.RequestHandler):
         #else:
         #    message = """\Subject: Extraction\n\n""" + printline
 
- 
+
         context = ssl.create_default_context()
         with smtplib.SMTP(smtp_server, port) as server:
             server.ehlo()  # Can be omitted
@@ -295,12 +307,11 @@ class Inserting(tornado.web.RequestHandler):
             server.ehlo()  # Can be omitted
             server.login(sender_email, password)
             server.sendmail(sender_email, receiver_email, msg.as_string())
- 
+
         print("Mail sent successfully to " + receiver_email) 
-         
- 
- 
- 
+
+
+
 # classe associata all'url ./getDataSS/id, crea lo Schema Summary del dataset selezionato
 # utilizza la collection ike del mongoDB
 # chunk si ottiene dalla funzione createSS che si trova a riga 330 circa
@@ -310,19 +321,19 @@ class DataHandlerSS(tornado.web.RequestHandler):
         db = self.settings['db']
         db.lodex.ike.find_one({'_id': int(endpoint_id)},
                               callback=self._on_response)
- 
- 
+
+
     def _on_response(self, response, error):
         ss = response['ss']                         # ss ora contiene il JSON con attributes,nodes,edges,... del campo ss nel MongoDB del dataset corrispondente
                                                     # (come viene costruito il JSON? con la query? metodo response? response è una stringa?)
- 
+
         ss.update(
             {'name': response['name'], 'id': response['_id'], 'uri': response['uri']})          # viene aggiunto nome,id,uri IN CODA al JSON del dataset
         chunk = createSS(ss)
         self.write(chunk)
         self.finish()
- 
- 
+
+
 #classe associata all'url /getDataCS
 # con la nuova versione il CS lo ottengo leggendo direttamente i dati da MongoDB
 class DataHandlerCS(tornado.web.RequestHandler):
@@ -331,7 +342,7 @@ class DataHandlerCS(tornado.web.RequestHandler):
         db = self.settings['db']
         db.lodex.ike.find_one({'_id': int(endpoint_id)},
                               callback=self._on_response)
- 
+
     def _on_response(self, response, error):
         cs = response['cs']
         cs.update(
@@ -339,20 +350,20 @@ class DataHandlerCS(tornado.web.RequestHandler):
         #chunk = createSS(ss, isCluster=True)                   istruzione dal vecchio codice
         self.write(cs)
         self.finish()
- 
- 
+
+
 
 # sembra che il software funzioni lo stesso senza IntensionalDataHandler
 class IntensionalDataHandler(tornado.web.RequestHandler):
     @tornado.web.asynchronous
     def get(self, s):
- 
+
         id = self.get_argument("id", None)
- 
+
         db.lodex.ike.find_one({'_id': int(id)}, callback=self._on_response)
- 
+
     def _on_response(self, response, error):
- 
+
         if error:
             raise tornado.web.HTTPError(500)
         obj = []

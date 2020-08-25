@@ -25,6 +25,7 @@ def threadProcess(endId):
                 print("Thread " + t.getName() + " terminated")
                 threads.remove(t)
 
+
 def endpointExtraction(id):
     p = mongo.getExtById(id)
 
@@ -35,7 +36,8 @@ def endpointExtraction(id):
         threadProcess(id)
     else:
         e = mongo.getLastRunById(id)
-        if (datetime.datetime.now()-e['date']).days >= 2:
+        print(e)
+        if 'date' not in e or (datetime.datetime.now()-e['date']).days >= 2:
             threadProcess(id)
 
     for t in threads:
@@ -49,8 +51,8 @@ def automaticExtraction(argv):
             endpointExtraction(end['_id'])
 
             print("Generating schema summary")
-            generateSS(end['_id'])
-            generateCS(end['_id'])
+            generateSS([end['_id']])
+            generateCS([end['_id']])
 
     elif isinstance(argv[0], str):
         url = argv[0]
@@ -60,8 +62,8 @@ def automaticExtraction(argv):
         endpointExtraction(end['_id'])
 
         print("Generating schema summary ")
-        generateSS([(end['_id'])])
-        generateCS([(end['_id'])])
+        generateSS([end['_id']])
+        generateCS([end['_id']])
     else:
         print("Something awful happened")
 

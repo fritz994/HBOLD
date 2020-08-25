@@ -41,11 +41,12 @@ def generateSS(argv):
 
 
 if __name__ == "__main__":
+    print(sys.argv[1:])
     if len(sys.argv) == 2 and sys.argv[1] == "all":
         generateSchemas("all")
-    elif all(isinstance(x, int) for x in sys.argv[1:]):
+    elif all(isinstance(int(x), int) for x in sys.argv[1:]):
         for x in sys.argv[1:]:
-            generateSchemas(x)
+            generateSchemas(int(x))
     else:
         print("Usage --> generateSchemaSummary.py \"all\" \n or generateSchemaSummary digit [other digits]")
         exit()

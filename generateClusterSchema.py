@@ -22,7 +22,7 @@ def generateCSforEnd(id):
 def generateCS(argv):
     if 'all' == argv[0]:
         generateCSforAllEnd()
-    elif isinstance(argv[0], int):
+    elif isinstance(int(argv[0]), int):
         generateCSforEnd(int(argv[0]))
     else:
         print("Bad input for the generation of cluster schema... a number or the string 'all' is required as input")
