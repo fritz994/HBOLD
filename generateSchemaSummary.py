@@ -32,10 +32,10 @@ def generateSSforEndById(id):
 
 
 def generateSS(argv):
-    if 'all' == argv[0]:
+    if 'all' == argv:
         generateSSforAllEnd()
-    elif isinstance(argv[0], int):
-        generateSSforEndById(int(argv[0]))
+    elif isinstance(int(argv), int):
+        generateSSforEndById(int(argv))
     else:
         print("Bad input for generation of the schema summary... a number or the string 'all' is required")
 

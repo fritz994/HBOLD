@@ -10,6 +10,7 @@ import smtplib   # serve per mandare la mail
 import ssl
 import time
 from downloadDataset import downloadDataset as dd
+from downloadDataset import downloadPortal as dp
 import SchemaExtractorTestV3
 
 from time import time, ctime
@@ -113,7 +114,7 @@ class MainHandlerOk(tornado.web.RequestHandler):
         #https://stackoverflow.com/questions/17284286/disable-template-processing-in-tornadoweb
         #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
         #self.render('LODeX_template.html', loader = template.BaseLoader)
-        with open('LODeX.html', 'r') as file:
+        with open('templates/LODeX.html', 'r') as file:
             self.write(file.read())
 
 class SchemaSummary(tornado.web.RequestHandler):
@@ -268,13 +269,13 @@ class Inserting(tornado.web.RequestHandler):
         with open('fileMail', 'w') as fo:                                               # redirigo l'output di downloadDataset in un file
             with redirect_stdout(fo):                                                   # il cui contenuto finirà nella mail da mandare (rendere più chiaro il contenuto)
                 if endp != "":
-                    dd([endp])
+                    dd(endp)
                 if c1 == "1":
-                    dd([p1])
+                    dp(p1)
                 if c2 == "1":
-                    dd([p2])
+                    dp(p2)
                 if c3 == "1":
-                    dd([p3])
+                    dp(p3)
 
         with open('fileMail', 'r') as file:
             data = file.read()
@@ -285,7 +286,7 @@ class Inserting(tornado.web.RequestHandler):
 
         port = 587  # For starttls
         smtp_server = "smtp.gmail.com"
-        sender_email = "email-address"
+        sender_email = "email"
         receiver_email = mail
         password = "password"
         msg = MIMEMultipart('alternative')
@@ -648,14 +649,14 @@ if __name__ == "__main__":
         (r"/hbold/treecs/([0-9]+)",TreemapCS),
         (r"/hbold/suncs/([0-9]+)",SunburstCS),
         (r"/hbold/packcs/([0-9]+)",CirclePackCS),
-		(r"/hbold/cs/([0-9]+)",ClusterSchema),
+        (r"/hbold/cs/([0-9]+)",ClusterSchema),
         (r"/hbold/exploreSS/([0-9]+)",ExploreSS),
         (r"/hbold/insertDataset/", InsertDataset),                            # parte nuova
         (r"/hbold/inserting/([^ ]*)", Inserting),                             # parte nuova
         (r"/hbold/proxy/(.*)$", proxy),
       #  (r"/lodex2/query", QueryDataHandler)
     ],
-        static_path=os.path.join(os.path.dirname(__file__), "static"), db=db, autoreload=True, debug=True)
+        static_path=os.path.join(os.path.dirname(__file__), "static"), template_path=os.path.join(os.path.dirname(__file__), "templates"), db=db, autoreload=True, debug=True)
     # seguono le operazioni per lanciare HBOLD su un browser
     port = 8891
     print('Listening on http://localhost:', port)

@@ -46,31 +46,35 @@ def endpointExtraction(id):
 
 
 def automaticExtraction(argv):
-    if(argv[0] == 'all'):
+    print(argv)
+    if(argv == 'all'):
         for end in mongo.getAllEndopoinLodex():
             endpointExtraction(end['_id'])
 
             print("Generating schema summary")
-            generateSS([end['_id']])
-            generateCS([end['_id']])
+            generateSS(end['_id'])
+            generateCS(end['_id'])
 
-    elif isinstance(argv[0], str):
-        url = argv[0]
+    elif isinstance(argv, str):
+        url = argv
         end = mongo.getEndopointByUrl(url)
         p = mongo.getExtById(end['_id'])
 
         endpointExtraction(end['_id'])
 
         print("Generating schema summary ")
-        generateSS([end['_id']])
-        generateCS([end['_id']])
+        generateSS(end['_id'])
+        generateCS(end['_id'])
     else:
         print("Something awful happened")
 
 
 
+#def main(argv):
+#    automaticExtraction("all")
+
 def main(argv):
-    automaticExtraction(["all"])
+    automaticExtraction("https://trafair.eu/sparql")
 
 
 if __name__ == "__main__":
