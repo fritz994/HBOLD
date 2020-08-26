@@ -21,6 +21,9 @@ def downloadPortal(argv):
         sparql.setQuery(q.dataScienceParisDownload().query)
     elif argv == "http://data.europa.eu/euodp/sparqlep":
         sparql.setQuery(q.dataEuDownload().query)
+    else:
+        sparql.setQuery(q.dataEuDownload().query)
+
     sparql.setReturnFormat(XML)
 
     results = sparql.queryAndConvert()
@@ -28,60 +31,62 @@ def downloadPortal(argv):
 
     #è brutto lasciare un if aperto fino alla fine della funzione
     #aggiungere un controllo per uscire quando parsed è vuoto. c'è da capire cosa ritorna parsed e come capire quando si può considerare vuoto
+    if not parsed:
+        print(f"Nothing found at {argv}. Is the url correct?")
+        return
 
-    if parsed:
-        endDIct = {}
+    endDIct = {}
 
-        cont = 0
-        for end in parsed:
-            end["url"] = end["url"].split("?")[0]
-            if 'title' in end:
-                if end['url'] in endDIct:
-                    tmp = endDIct[end['url']]
-                    tmp['name'].append(end['title'])
-                    endDIct[end['url']] = tmp
-                else:
-                    endDIct[end['url']] = {'name':[end['title']]}
+    cont = 0
+    for end in parsed:
+        end["url"] = end["url"].split("?")[0]
+        if 'title' in end:
+            if end['url'] in endDIct:
+                tmp = endDIct[end['url']]
+                tmp['name'].append(end['title'])
+                endDIct[end['url']] = tmp
             else:
-                endDIct[end['url']] = {'name':[end['url']]}
-            cont += 1
+                endDIct[end['url']] = {'name':[end['title']]}
+        else:
+            endDIct[end['url']] = {'name':[end['url']]}
+        cont += 1
 
-        datasets = []
-        urls = []
+    datasets = []
+    urls = []
 
-	# beware that count contains the last id found in mongodb + 1
-        count = mongo.getLastIdEndpointsLodex()
-        copy = False
+    # beware that count contains the last id found in mongodb + 1
+    count = mongo.getLastIdEndpointsLodex()
+    copy = False
 
-        for key in endDIct:
-            endpoint = mongo.getAllEndopoinLodex()
-            for e in endpoint:
-                if e["url"] == key:
-                    copy = True
-                    break
+    for key in endDIct:
+        endpoint = mongo.getAllEndopoinLodex()
+        for e in endpoint:
+            if e["url"] == key:
+                copy = True
+                break
 
-            if not copy:
-                ds = {}
-                ds = {'url': key, '_id': count, 'name': endDIct[key]['name'][0]}
-                urls.append(key)
-                count = count+1
-                #  ds['datasets'] = [{'name':endDIct[key]['name'][0]}]    --  OLD and I think not correct -- Federico
-                ds['datasets'] = endDIct[key]['name']
-                datasets.append(ds)
+        if not copy:
+           ds = {}
+           ds = {'url': key, '_id': count, 'name': endDIct[key]['name'][0]}
+           urls.append(key)
+           count = count+1
+           #  ds['datasets'] = [{'name':endDIct[key]['name'][0]}]    --  OLD and I think not correct -- Federico
+           ds['datasets'] = endDIct[key]['name']
+           datasets.append(ds)
 
-            copy = False
+           copy = False
 
-        # Stringa per il parsing
-        print("La ricerca di nuovi dataset sul portale " + argv + " ha trovato " + cont + " risultati")
-        print("Sono stati trovati " + str(len(datasets)) + " nuovi datasets")
-        print(datasets)
-        print(urls)
+    # Stringa per il parsing
+    print(f"La ricerca di nuovi dataset sul portale {argv} ha trovato {cont} risultati")
+    print(f"Sono stati trovati {str(len(datasets))} nuovi datasets")
+    print(datasets)
+    print(urls)
 
-        if len(datasets) > 0:
-            mongo.inserLodexDatasets(datasets)
-            for i in range(0, len(datasets)):
-                url = urls[i]
-                automaticExtraction([url])
+    if len(datasets) > 0:
+        mongo.inserLodexDatasets(datasets)
+        for i in range(0, len(datasets)):
+            url = urls[i]
+            automaticExtraction([url])
 
 
 def downloadDataset(url):
@@ -91,7 +96,7 @@ def downloadDataset(url):
     id = mongo.startTestNew(url)
     print(id)
 
-    """in runInfo, id <C3><A8> il numero dentro a ObjectId"""
+    # in runInfo, id <C3><A8> il numero dentro a ObjectId
     copy = False
     count = mongo.getLastIdEndpointsLodex()
     datasets = []
@@ -131,7 +136,7 @@ def downloadDataset(url):
 
 
 def main(argv):
-    for portal in ["https://www.europeandataportal.eu/sparql", "https://io.datascience-paris-saclay.fr/sparql", "http://data.europa.eu/euodp/sparqlep"]:
+    for portal in ["https://trafair.eu/sparql", "https://www.europeandataportal.eu/sparql", "https://io.datascience-paris-saclay.fr/sparql", "http://data.europa.eu/euodp/sparqlep"]:
         print(portal)
         downloadPortal(portal)
 

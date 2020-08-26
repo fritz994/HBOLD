@@ -1,8 +1,6 @@
 import sys
 import pymongo as pm
-import extractor.PostProcesingCulsteredV3 as pp
-#import extractor.PostProcesingClusteredV4 as pp4
-
+import extractor.PostProcesingClusteredV3 as pp
 
 dbLodex = pm.MongoClient().lodex
 

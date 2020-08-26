@@ -11,7 +11,8 @@ import ssl
 import time
 from downloadDataset import downloadDataset as dd
 from downloadDataset import downloadPortal as dp
-import SchemaExtractorTestV3
+import PostProcesingClusteredV3 as ppc
+import SchemaExtractorTestV3 as se
 
 from time import time, ctime
 
@@ -117,6 +118,13 @@ class MainHandlerOk(tornado.web.RequestHandler):
         with open('templates/LODeX.html', 'r') as file:
             self.write(file.read())
 
+class About(tornado.web.RequestHandler):
+    def get(self):
+        self.set_header('Content-Type', '') # I have to set this header 
+        #https://stackoverflow.com/questions/17284286/disable-template-processing-in-tornadoweb
+        #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
+        self.render('about.html')
+
 class SchemaSummary(tornado.web.RequestHandler):
     def get(self,endpoint_id):
         self.set_header('Content-Type', '') # I have to set this header 
@@ -132,14 +140,6 @@ class HiericalSS(tornado.web.RequestHandler):
         #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
         print('Creato SS con id ',endpoint_id)
         self.render('sshier.html')
-class TreemapCS(tornado.web.RequestHandler):
-    def get(self,endpoint_id):
-        self.set_header('Content-Type', '') # I have to set this header 
-        #https://stackoverflow.com/questions/17284286/disable-template-processing-in-tornadoweb
-        #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
-        print('Creato SS con id ',endpoint_id)
-        self.render('treemap.html')
-
 
 # classe che viene chiamata quando si espande il cluster schema
 class ExploreSS(tornado.web.RequestHandler):
@@ -157,6 +157,14 @@ class ClusterSchema(tornado.web.RequestHandler):
         print('Creato CS con id ',endpoint_id)
         self.render('cs.html')
 
+class TreemapCS(tornado.web.RequestHandler):
+    def get(self,endpoint_id):
+        self.set_header('Content-Type', '') # I have to set this header 
+        #https://stackoverflow.com/questions/17284286/disable-template-processing-in-tornadoweb
+        #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
+        print('Creato SS con id ',endpoint_id)
+        self.render('treemap.html')
+
 class SunburstCS(tornado.web.RequestHandler):
     def get(self,endpoint_id):
         self.set_header('Content-Type', '') # I have to set this header 
@@ -173,13 +181,6 @@ class CirclePackCS(tornado.web.RequestHandler):
         print('Creato CS con id ',endpoint_id)
         self.render('circlepack.html')
 
-class About(tornado.web.RequestHandler):
-    def get(self):
-        self.set_header('Content-Type', '') # I have to set this header 
-        #https://stackoverflow.com/questions/17284286/disable-template-processing-in-tornadoweb
-        #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
-        self.render('about.html')
-        #self.render('about.html')
 
 # associata a ./index
 class IndexDatasetHandler(tornado.web.RequestHandler):
@@ -189,8 +190,7 @@ class IndexDatasetHandler(tornado.web.RequestHandler):
         exid = [a['_id'] for a in exclusion]
         # pprint.pprint(exid)
         db = self.settings['db']
-        cursor = db.lodex.ike.find({'ss': {'$exists': True}, '_id': {'$nin': exid}
-                                    })
+        cursor = db.lodex.ike.find({'ss': {'$exists': True}, '_id': {'$nin': exid}})
         res = []
         while (yield cursor.fetch_next):
             tmp = cursor.next_object()
@@ -200,9 +200,8 @@ class IndexDatasetHandler(tornado.web.RequestHandler):
                         'propCount': len(tmp['propList']) if 'propList' in tmp else None,
                         'classesCount': len(tmp['classes']) if 'classes' in tmp else None})
         self.content_type = 'application/json'
-        print('Pagina Home con', len(res) , 'dataset')                      # stampa sul prompt il numero dei dataset trovati
-        self.write({'data': res})            # scrive su ./index il JSON dei dataset trovati
-                                             # cambiando res non funziona più nulla ----> legame tra index e la home?
+        print('Pagina Home con', len(res) , 'dataset')         # stampa sul prompt il numero dei dataset trovati
+        self.write({'data': res})                              # scrive su ./index il JSON dei dataset trovati
         self.finish()
 
 
@@ -212,10 +211,9 @@ class IndexDatasetHandlerFull(tornado.web.RequestHandler):
     @gen.coroutine
     def get(self):
         exid = [a['_id'] for a in exclusion]
-        #         pprint.pprint(exid)
+        #pprint.pprint(exid)
         db = self.settings['db']  #
-        cursor = db.lodex.ike.find({'ss': {'$exists': True}, '_id': {'$nin': exid}
-                                    })
+        cursor = db.lodex.ike.find({'ss': {'$exists': True}, '_id': {'$nin': exid}})
         res = []
         while (yield cursor.fetch_next):
             tmp = cursor.next_object()
@@ -229,7 +227,6 @@ class IndexDatasetHandlerFull(tornado.web.RequestHandler):
                         })
         self.content_type = 'application/json'
         self.write({'data': res})
-        print(len(res))
         self.finish()
 
 
@@ -238,7 +235,6 @@ class GraphHandler(tornado.web.RequestHandler):
         self.render('insertDataset.html')
 
 
-# parte nuova
 class InsertDataset(tornado.web.RequestHandler):
     def get(self):
         self.set_header('Content-Type', '')
@@ -286,7 +282,7 @@ class Inserting(tornado.web.RequestHandler):
 
         port = 587  # For starttls
         smtp_server = "smtp.gmail.com"
-        sender_email = "email"
+        sender_email = "email-address"
         receiver_email = mail
         password = "password"
         msg = MIMEMultipart('alternative')
@@ -296,7 +292,7 @@ class Inserting(tornado.web.RequestHandler):
             msg["To"] = receiver_email
             msg["From"] = sender_email
             msg.attach(MIMEText("Extraction of the dataset at the link " + endp + ".\n" + printline, 'plain'))
-            #message = """\Subject: Extraction\n\nExtraction of the dataset at the link """ + endp + """.\n""" + printline
+        #    message = """\Subject: Extraction\n\nExtraction of the dataset at the link """ + endp + """.\n""" + printline
         #else:
         #    message = """\Subject: Extraction\n\n""" + printline
 
@@ -309,8 +305,7 @@ class Inserting(tornado.web.RequestHandler):
             server.login(sender_email, password)
             server.sendmail(sender_email, receiver_email, msg.as_string())
 
-        print("Mail sent successfully to " + receiver_email) 
-
+        print("Mail sent successfully to " + receiver_email)
 
 
 # classe associata all'url ./getDataSS/id, crea lo Schema Summary del dataset selezionato
@@ -320,17 +315,15 @@ class DataHandlerSS(tornado.web.RequestHandler):
     @tornado.web.asynchronous
     def get(self, endpoint_id):
         db = self.settings['db']
-        db.lodex.ike.find_one({'_id': int(endpoint_id)},
-                              callback=self._on_response)
+        db.lodex.ike.find_one({'_id': int(endpoint_id)}, callback=self._on_response)
 
 
     def _on_response(self, response, error):
         ss = response['ss']                         # ss ora contiene il JSON con attributes,nodes,edges,... del campo ss nel MongoDB del dataset corrispondente
                                                     # (come viene costruito il JSON? con la query? metodo response? response è una stringa?)
 
-        ss.update(
-            {'name': response['name'], 'id': response['_id'], 'uri': response['uri']})          # viene aggiunto nome,id,uri IN CODA al JSON del dataset
-        chunk = createSS(ss)
+        ss.update({'name': response['name'], 'id': response['_id'], 'uri': response['uri']})          # viene aggiunto nome,id,uri IN CODA al JSON del dataset
+        chunk = ppc.createSS(ss)
         self.write(chunk)
         self.finish()
 
@@ -341,287 +334,19 @@ class DataHandlerCS(tornado.web.RequestHandler):
     @tornado.web.asynchronous
     def get(self, endpoint_id):
         db = self.settings['db']
-        db.lodex.ike.find_one({'_id': int(endpoint_id)},
-                              callback=self._on_response)
+        db.lodex.ike.find_one({'_id': int(endpoint_id)}, callback=self._on_response)
 
     def _on_response(self, response, error):
         cs = response['cs']
-        cs.update(
-            {'title': response['name'], 'id': response['_id'], 'uri': response['uri']})
+        cs.update({'title': response['name'], 'id': response['_id'], 'uri': response['uri']})
         #chunk = createSS(ss, isCluster=True)                   istruzione dal vecchio codice
         self.write(cs)
         self.finish()
 
 
-
-# sembra che il software funzioni lo stesso senza IntensionalDataHandler
-class IntensionalDataHandler(tornado.web.RequestHandler):
-    @tornado.web.asynchronous
-    def get(self, s):
-
-        id = self.get_argument("id", None)
-
-        db.lodex.ike.find_one({'_id': int(id)}, callback=self._on_response)
-
-    def _on_response(self, response, error):
-
-        if error:
-            raise tornado.web.HTTPError(500)
-        obj = []
-        tmp = {}
-        tmp['s'] = self.get_argument("s", None)
-        tmp['p'] = self.get_argument("p", None)
-        tmp['o'] = self.get_argument("o", None)
-        trovato = False
-        step = 0
-        ik = []
-        if 'ik' in response:
-            for i in response['ik']:
-                # print extrValue(i['s'])
-                if extrValue(i['s']) == tmp['s']:
-                    trovato = True
-                    tmp['ss'] = i['s']
-                    ik.append(i)
-                if extrValue(i['s']) == tmp['p']:
-                    trovato = True
-                    tmp['pp'] = i['s']
-                    ik.append(i)
-                if extrValue(i['s']) == tmp['o']:
-                    trovato = True
-                    tmp['oo'] = i['s']
-                    ik.append(i)
-        obj.append(tmp)
-        node = []
-        invNode = {}
-        index = 0
-        vocab = set()
-        nodes = set()
-        pprint.pprint(ik)
-        for a in ik:
-            nodes.add(a['s'])
-            nodes.add(a['o'])
- 
-        for clas in nodes:
-            vocab.add(extractVocab(clas))
-            node.append({'name': extrValue(clas), 'fullname': clas,
-                         'vocab': extractVocab(clas)})
-            invNode[clas] = index
-            index += 1
- 
-        edges = []
-        #         pprint.pprint(response["properties"])
-        for prop in ik:
-            if prop['s'] in invNode and prop['o'] in invNode:
-                aggiunto = False
-                for e in range(len(edges)):
-                    if edges[e]['source'] == invNode[prop['s']] and edges[e]['target'] == invNode[prop['o']]:
-                        edges[e]['label'].append({
-                            'name': extrValue(prop['p']),
-                            'vocab': extractVocab(prop['p'])})
-                        aggiunto = True
-                if not aggiunto:
-                    edges.append({'source': invNode[prop['s']],
-                                  'target': invNode[prop['o']],
-                                  'label': [{
-                                      'name': extrValue(prop['p']),
-                                      'vocab': extractVocab(prop['p'])}]})
- 
-                    #         pprint.pprint({'nodes':node,'links':edges})
-                    #
-                    #         pprint.pprint(vocab)
-                    #
-        print('lodex2')
-        self.write(
-            {'nodes': node, 'links': edges, 'vocab': list(vocab), 'title': response['name'], 'id': response['_id']})
-        self.finish()
- 
- 
-def extractVocab(uri):
-    if len(uri.rsplit('/')[-1].split(':')) > 1:
-        return ':'.join(uri.rsplit(':')[:-1])
-    elif len(uri.rsplit('/')[-1].split('#')) > 1:
-        return '#'.join(uri.rsplit('#')[:-1])
-    else:
-        return '/'.join(uri.rsplit('/')[:-1])
- 
- 
-def extrValue(uri):
-    if len(uri.rsplit('/')[-1].split(':')) > 1:
-        return uri.rsplit(':')[-1]
-    elif len(uri.rsplit('/')[-1].split('#')) > 1:
-        return uri.rsplit('#')[-1]
-    else:
-        return uri.rsplit('/')[-1]
- 
-# funzione che costruisce lo SS al momento della pressione di uno dei pulsanti
-def createSS(ss, isCluster=False):
-    node = []
-    invNode = {}
-    index = 0
-    vocab = set('/'.join(a['p'].rsplit('/')[:-1]) for a in ss['attributes'])            #vocab è l'insieme degli http da cui si prendono i dati
-    attributes = {}
- 
-    for att in ss['attributes']:
-        #             vocab.add('/'.join(att['p'].rsplit('/')[:-1])
-        if att['c'] not in attributes:
-            attributes[att['c']] = [{'n': int(att['n']), 'p': att['p']}]
-        else:
-            attributes[att['c']].append({'n': int(att['n']), 'p': att['p']})            # attributes è un JSON formato dalle classi, e per ogni classe sono riportati gli attributi (campo p nel MongoDB)
- 
-    for clas in ss['nodes']:
-        vocab.add(extractVocab(clas['c']))                                              # extrVocab e extrValue sono funzioni definite sopra
-        att = []
-        if clas['c'] in attributes:
-            att = [{'p': extrValue(a['p']),
-                    'n': float("{0:.2f}".format(float(float(a['n']) / float(clas['n'])))) if a['n'] > 0 else 0,
-                    'vocab': extractVocab(a['p']), 'fullName': a['p']} for a in
-                   sorted(attributes[clas['c']], key=itemgetter('n'), reverse=True)]
- 
-        currentNode = {'name': extrValue(clas['c']), 'ni': int(clas['n']), 'vocab': extractVocab(clas['c']),
-                       'att': att, 'fullName': clas['c']}
- 
- 
-        """custer = []
-        if 'cluster' in clas:
-            for cl in clas['cluster']:
-                currentClust = {'n': cl['n']}
-                currentClust['cluster'] = [{'vocab': extractVocab(c), 'uri': c, 'name': extrValue(c)} for c in
-                                           cl['cluster']]
-                custer.append(currentClust)
-        if len(custer) > 0:
-            currentNode['cluster'] = custer"""
- 
-        node.append(currentNode)
-        invNode[clas['c']] = index                                      # invNode è un vettore che "numera" le classi nel dataset
-        index += 1
- 
-    # pprint.pprint(invNode)
- 
-    edges = []                                                          # qui inizia la parte di creazione degli archi
-     #         pprint.pprint(response["properties"])
-    for prop in ss['edges']:
-        if prop['s'] in invNode and prop['o'] in invNode:
-            aggiunto = False
-            for e in range(len(edges)):
-                if edges[e]['source'] == invNode[prop['s']] and edges[e]['target'] == invNode[prop['o']]:
-                    edges[e]['label'].append({'np': int(prop['n']),
-                                              'name': extrValue(prop['p']),
-                                              'vocab': extractVocab(prop['p']),
-                                              'fullName': prop['p']})
-                    aggiunto = True
-            if not aggiunto:
-                edges.append({'source': invNode[prop['s']],
-                              'target': invNode[prop['o']],
-                              'label': [{'np': int(prop['n']),
-                                         'name': extrValue(prop['p']),
-                                         'vocab': extractVocab(prop['p']),
-                                         'fullName': prop['p']}]})
- 
-    for i in range(len(edges)):
-        edges[i]['label'] = sorted(edges[i]['label'], key=itemgetter('np'))
- 
- 
-    if(not isCluster):
-        chunk = {'nodes': node, 'links': edges, 'classes': None, 'classeslinks': None, 'vocab': list(vocab),
-                 'title': ss['name'], 'id': ss['id'], 'uri': ss['uri']}
-    else:
-        '''
-        initializing graph with nodes
-        '''  
-        g = Graph(len(node))
- 
-        '''
-        add edges to the graph
-        '''
-        for e in edges:
-            for i in range(len(e['label'])):
-                g.add_edge(e['source'], e['target'])
- 
- 
- 
-        '''
-        generate communities
-        '''
-        multi = g.community_multilevel()
-        communities = []
-        numCommunity = max(multi.membership) + 1
-         
-        '''
-        assign each node to own community
-        '''
-        for i in range(numCommunity):
-            nodesCom = []
-            classesCom = []
-            for n in range(len(node)):
-                if multi.membership[n] == i:
-                    node[n]['community'] = i
-                    node[n]['id'] = n
-                    nodesCom.append(node[n])
-                    classesCom.append(node[n]['name'])
- 
-            currentCommunity = {'name': "", 'ni': len(nodesCom), 'vocab': "",
-                                'nodes': nodesCom, 'fullName': "", 'classes': classesCom}
-            communities.append(currentCommunity)
-         
-        """
-        add edges within every community
-        """
-        for i in range(numCommunity):
-            edgesCom = []
-            for e in edges:
-                source= node[e['source']]
-                target= node[e['target']]
-                if source['community'] == target['community'] == i:
-                    edgesCom.append(
-                        {'source': e['source'], 'target': e['target']})
-            communities[i]['edges'] = edgesCom
- 
-        degreeNodes = [0] * len(node)
-         
-        """
-        find the node with the higher degree which names own community
-        """
-        for c in communities:
-            maxCount = -1
-            nodeMax = None
-            for e in c['edges']:                    
-                if e['source'] != e['target']:
-                    degreeNodes[e['source']] += 1
-                    degreeNodes[e['target']] += 1
-            for n in c['nodes']:
-                if degreeNodes[n['id']] > maxCount:
-                    maxCount = degreeNodes[n['id']]
-                    nodeMax = n['id']
-            c['name'] = node[nodeMax]['name']
-            c['fullName'] = node[nodeMax]['name']
- 
-        linksCommunity = []
- 
-        """
-        find edges between communities
-        """
-        for e in edges:
-            source= node[e['source']]
-            target= node[e['target']]
-            if source['community'] != target['community']:
-                linksCommunity.append(
-                    {'source': source['community'], 'target': target['community']})
-                    
-        """
-        pass parameters to html
-        """       
-        chunk = {'nodes': communities, 'links': linksCommunity, 'classes': node, 'classeslinks': edges,
-                 'vocab': list(vocab), 'title': ss['name'], 'id': ss['id'], 'uri': ss['uri']}
-
-    return chunk
-
-
-
-
-
 if __name__ == "__main__":
     db = motor.MotorClient()
-    db2 = motor.MotorClient().lodex
+    #db2 = motor.MotorClient().lodex
 
     # seguono i diversi indirizzi a cui si attacca application
     application = tornado.web.Application(handlers=[

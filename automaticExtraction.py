@@ -49,33 +49,42 @@ def automaticExtraction(argv):
     print(argv)
     if(argv == 'all'):
         for end in mongo.getAllEndopoinLodex():
+            print(f"Index extraction for {end['url']}")
             endpointExtraction(end['_id'])
-
-            print("Generating schema summary")
+            print(f"Generating schema summary for {end['url']}")
             generateSS(end['_id'])
+            print(f"Generating cluster schema for {end['url']}")
             generateCS(end['_id'])
 
     elif isinstance(argv, str):
         url = argv
         end = mongo.getEndopointByUrl(url)
+        if end is None:
+            print(f"No endpoint found in the database. Consider uploading {url} through the addManuallyDataset utils")
+            return
+
         p = mongo.getExtById(end['_id'])
 
+        print(f"Index extraction for {url}")
         endpointExtraction(end['_id'])
-
-        print("Generating schema summary ")
+        print(f"Generating schema summary for {url}")
         generateSS(end['_id'])
+        print(f"Generating cluster schema for {url}")
         generateCS(end['_id'])
     else:
         print("Something awful happened")
 
 
 
-#def main(argv):
-#    automaticExtraction("all")
-
 def main(argv):
-    automaticExtraction("https://trafair.eu/sparql")
-
+    print(argv)
+    if len(argv)==0:
+        print("all")
+        automaticExtraction("all")
+    else:
+        for el in argv:
+            print(el)
+            automaticExtraction(el)
 
 if __name__ == "__main__":
     main(sys.argv[1:])

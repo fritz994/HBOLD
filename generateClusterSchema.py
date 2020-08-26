@@ -3,7 +3,8 @@
 
 import sys
 import pymongo as pm
-import extractor.PostProcesingClusteredV4 as pp
+import extractor.PostProcesingClusteredV3 as pp
+#import extractor.PostProcesingClusteredV4 as pp
 
 dbLodex= pm.MongoClient().lodex
 
@@ -12,11 +13,11 @@ def generateCSforAllEnd():
     print(len(ids))
 
     for id in ids:
-        pp.postProcForId(id)
+        pp.postProcForIdCluster(id)
 
 
 def generateCSforEnd(id):
-    pp.postProcForId(id)
+    pp.postProcForIdCluster(id)
 
 
 def generateCS(argv):
