@@ -22,13 +22,13 @@ logfun = logging.getLogger("logfun")
 
 #used in downloadDataset
 def parseResponseForDatasetExtr(endpoint,results,phase,enableLog=True):
-    if isinstance(results,xml.dom.minidom.Document):                   
-        try:           
+    if isinstance(results,xml.dom.minidom.Document):
+        try:
             # pretty_print = lambda data: '\n'.join([line for line in data.toprettyxml(indent=' '*2).split('\n') if line.strip()])
             # rtmp = parseString(pretty_print(results))
             # print rtmp.toprettyxml()
             res = results.getElementsByTagName('result')
-            
+
             childcount=0
             for node in res:
                 for binn in node.getElementsByTagName('binding'):
@@ -56,7 +56,7 @@ def parseResponseForDatasetExtr(endpoint,results,phase,enableLog=True):
         print("addinfourl")
         logfun.exception("Something awful happened!")
         var = traceback.format_exc()
-        if enableLog:    
+        if enableLog:
             errore = {"date":datetime.datetime.now(),"phase":phase,"traceback":results.read()}
             mongo.addTestError(endpoint, errore)
         return None
@@ -69,8 +69,8 @@ def parseResponseForDatasetExtr(endpoint,results,phase,enableLog=True):
 
 #unused
 def parseResponseWithType(runId,results,phase,enableLog=True,logCustom=False):
-    if isinstance(results,xml.dom.minidom.Document):                   
-        try:           
+    if isinstance(results,xml.dom.minidom.Document):
+        try:
             res = results.getElementsByTagName('result')
             # print results.toprettyxml()
             childcount=0
@@ -82,7 +82,7 @@ def parseResponseWithType(runId,results,phase,enableLog=True,logCustom=False):
                     res = [[{binn.attributes['name'].nodeValue: binn.firstChild.firstChild.nodeValue,'type':binn.firstChild.tagName} for binn in node.getElementsByTagName('binding')] for node in res]
             elif childcount == 3:
                     res = [[{binn.attributes['name'].nodeValue: binn.childNodes[1].firstChild.nodeValue,'type':binn.childNodes[1].tagName} for binn in node.getElementsByTagName('binding')] for node in res]    
-            
+
             if len(res)>0 or (len(res)==0 and results.getElementsByTagName('result') is not None):
                 # pprint.pprint(res)
                 return res
@@ -101,7 +101,7 @@ def parseResponseWithType(runId,results,phase,enableLog=True,logCustom=False):
         print("addinfourl")
         logfun.exception("Something awful happened!")
         var = traceback.format_exc()
-        if enableLog:    
+        if enableLog:
             errore = {"date":datetime.datetime.now(),"phase":phase,"traceback":results.read()}
             mongo.addTestErrorNew(runId, errore)
         return None
@@ -114,12 +114,11 @@ def parseResponseWithType(runId,results,phase,enableLog=True,logCustom=False):
 
 #unused
 def parseResponse(runId,results,phase,enableLog=True):
-    """
-    Return None if something goes wrong or the response.
-    """
-    if isinstance(results,xml.dom.minidom.Document):                   
+    # Return None if something goes wrong or the response.
+
+    if isinstance(results,xml.dom.minidom.Document):
         # print "dom.xml"
-        try:           
+        try:
             # pretty_print = lambda data: '\n'.join([line for line in data.toprettyxml(indent=' '*2).split('\n') if line.strip()])
             # rtmp = parseString(pretty_print(results))
             # print rtmp.toprettyxml()
@@ -134,7 +133,7 @@ def parseResponse(runId,results,phase,enableLog=True):
                     res = [dict([(binn.attributes['name'].nodeValue, binn.firstChild.firstChild.nodeValue) for binn in node.getElementsByTagName('binding')]) for node in res]
             elif childcount == 3:
                     res = [dict([(binn.attributes['name'].nodeValue, binn.childNodes[1].firstChild.nodeValue) for binn in node.getElementsByTagName('binding')]) for node in res]    
-            
+
             if len(res)>0 or (len(res)==0 and results.getElementsByTagName('result') is not None):
                 return res
             else:
@@ -166,7 +165,7 @@ def parseResponse(runId,results,phase,enableLog=True):
 ## Test if and Enpoind i reacheble and the result of a quey is parsable
 def testConnection(endpoint,q,sparql,runId):
     # START TEST CONNECTION TIME
-    
+
     sparql.setQuery(q.testConnection().query)
     sparql.setReturnFormat(XML)
     #print(endpoint['_id'])
@@ -212,7 +211,7 @@ def downloadClassPlusInstance(endpoint, q, sparql,runId):
                 if len(parsedRes) == 10000:
                     countResults=countResults+1
                 else:
-                    countResults=-1    
+                    countResults=-1
             elif len(clasIntance)==0:
                 errore = {"date":datetime.datetime.now(),"phase":"ClassPlusInstance"}
                 mongo.addTestErrorNew(runId, errore)
@@ -233,7 +232,6 @@ def downloadClassPlusInstance(endpoint, q, sparql,runId):
 
 
 def downloadPropListPlusCount(endpoint, q, sparql,runId):
-    
     sparql.setReturnFormat(XML)
     countResults=0
     propCount=[]
@@ -256,7 +254,6 @@ def downloadPropListPlusCount(endpoint, q, sparql,runId):
                 errore = {"date":datetime.datetime.now(),"phase":"PropListPlusCount"}
                 mongo.addTestErrorNew(runId, errore)
                 countResults=-1
-            
     except:
         logfun.exception("Something awful happened!")
         var = traceback.format_exc()
@@ -272,7 +269,6 @@ def downloadPropListPlusCount(endpoint, q, sparql,runId):
 
 
 def downloadClasses(endpoint, q, sparql,runId):
-    
     sparql.setReturnFormat(XML)
     countResults=0
     clases=[]
@@ -313,7 +309,7 @@ def downloadNumbInstances(endpoint, q, sparql,runId):
     sparql.setReturnFormat(XML)
     cur=mongo.getCurrentRunByIdTestNew(runId)
     classPlusInstance=[]
-    for current in cur['classes']:        
+    for current in cur['classes']:
         sparql.setQuery(q.getInstacesByClasses(current['class']).query)
         print(endpoint['_id'])
         print(q.getInstacesByClasses(current['class']).query)
@@ -345,7 +341,7 @@ def downloadPropListCount(endpoint, q, sparql,runId):
     sparql.setReturnFormat(XML)
     cur=mongo.getCurrentRunByIdTestNew(runId)
     propPlusCount=[]
-    for current in cur.propList:        
+    for current in cur.propList:
         sparql.setQuery(q.getCountByProp(current['property']).query)
         print(endpoint['_id'])
         print(q.getCountByProp(current['property']).query)
@@ -368,7 +364,7 @@ def downloadPropListCount(endpoint, q, sparql,runId):
             errore = {"date":datetime.datetime.now(),"phase":"PropListCount","traceback":var,"prop":current['property']}
             mongo.addTestErrorNew(runId, errore)
             propPlusCount.append(current)
-            
+
         ###### Break qui???
     if len(propPlusCount) == len(cur.propList):
         mongo.updateEndpointPropListTestNew(runId, propPlusCount)
@@ -398,7 +394,6 @@ def downloadNumberClasses(endpoint, q, sparql,runId):
         errore = {"date":datetime.datetime.now(),"phase":"numb_classes","traceback":var}
         mongo.addTestErrorNew(runId, errore)
         return False
-    
 
 def downloadNumberTriples(endpoint, q, sparql,runId):
     sparql.setQuery(q.getNumberOfTriples().query)
@@ -478,11 +473,9 @@ def downloadPropList(endpoint,q,sparql,runId):
         errore = {"date":datetime.datetime.now(),"phase":"PropList"}
         mongo.addTestErrorNew(runId, errore)
         return False
-    
 
 #unused
 def downloadOnto(endpoint,q,sparql,runId):
-    
     sparql.setReturnFormat(XML)
     onto = [] #result
     ontSet=[]
@@ -501,9 +494,9 @@ def downloadOnto(endpoint,q,sparql,runId):
     if hasattr(end, 'propList'):
             findedProperty=set(pro['property'] for pro in end.propList)
     print("** Extract Onto Classe")
-    while len(findedClasses-queriedClasses)>0 or len(findedProperty-queriedProperty)>0:    
+    while len(findedClasses-queriedClasses)>0 or len(findedProperty-queriedProperty)>0:
         print('loop')
-        print(endpoint['_id'])   
+        print(endpoint['_id'])
         for clas in findedClasses-queriedClasses:
             sparql.setQuery(q.getOntoRelBySClass(clas).query)
             try:
@@ -514,7 +507,6 @@ def downloadOnto(endpoint,q,sparql,runId):
                     print(q.getOntoRelBySClass(clas).query)
                     for cur in parseResponse(runId,results,'extract_onto_class'):
                         if cur[1]['type'] != 'literal' and cur[1]['type'] != 'bnode': #diverso bnode
-                            
                             onto.append({'s':clas,'p':cur[0]['p'],'o':cur[1]['o']})
                             findedClasses.add(cur[1]['o'])
                             findedProperty.add(cur[0]['p'])
@@ -530,7 +522,7 @@ def downloadOnto(endpoint,q,sparql,runId):
 
         # binding Prop in subject classes
 
-        print("** Extract Onto prop")      
+        print("** Extract Onto prop")
         print(len(findedProperty-queriedProperty))
         for prop in findedProperty-queriedProperty:
             sparql.setQuery(q.getOntoRelBySClass(prop).query)
@@ -541,7 +533,7 @@ def downloadOnto(endpoint,q,sparql,runId):
                     print(endpoint['_id'])
                     print(q.getOntoRelBySClass(prop).query)
                     for cur in parseResponse(runId,results,'extract_onto_prop'):
-                        if cur[1]['type'] != 'literal' and cur[1]['type'] != 'bnode': 
+                        if cur[1]['type'] != 'literal' and cur[1]['type'] != 'bnode':
                             ontoPro.append({'s':prop,'p':cur[0]['p'],'o':cur[1]['o']})
                             findedClasses.add(cur[1]['o'])
                             findedProperty.add(cur[0]['p'])
@@ -570,7 +562,7 @@ def downloadPropLeftWithCount(endpoint,q,sparql,runId):
     anyError = False
     countError=0
     seqError=False
-    if 'classes' in curEnd:        
+    if 'classes' in curEnd:
         for clas in curEnd['classes']:
             countResults=0
             try:
@@ -580,7 +572,7 @@ def downloadPropLeftWithCount(endpoint,q,sparql,runId):
 
                     results = sparql.queryAndConvert()
                     parsedRes=parseResponse(runId,results,'prop_left_count')
-                   
+
                     if parsedRes is not None and len(parsedRes)>0:
                         print(endpoint['_id'])
                         print(currQuery)
@@ -595,7 +587,7 @@ def downloadPropLeftWithCount(endpoint,q,sparql,runId):
                         else:
                             countResults=-1
                     else:
-                        countResults=-1   
+                        countResults=-1
             except:
                 logfun.exception("Something awful happened!")
                 var = traceback.format_exc()
@@ -609,11 +601,11 @@ def downloadPropLeftWithCount(endpoint,q,sparql,runId):
                     print(" ABORTED ")
                     break
         mongo.insertTestLeftCountNew(propOne,runId,endpoint['_id'],0)
-        
+
         #literal
-        
+
         propOne=[]
-        
+
         for clas in curEnd['classes']:
             countResults=0
             try:
@@ -623,7 +615,6 @@ def downloadPropLeftWithCount(endpoint,q,sparql,runId):
 
                     results = sparql.queryAndConvert()
                     parsedRes=parseResponse(runId,results,'prop_left_count_lit')
-                   
 
                     if parsedRes is not None and len(parsedRes)>0:
                         print(endpoint['_id'])
@@ -654,8 +645,7 @@ def downloadPropLeftWithCount(endpoint,q,sparql,runId):
                     print(" ABORTED ")
                     break
         mongo.insertTestLeftCountNew(propOne,runId,endpoint['_id'],1)
-        
-        
+
     else:
         errore = {"date":datetime.datetime.now(),"phase":"prop_left_count"}
         mongo.addTestErrorNew(runId, errore)
@@ -696,9 +686,9 @@ def downloadPropLeftWithCountEasy(endpoint,q,sparql,runId):
         # pprint.pprint(propOne)
         if len(propOne)>0:
             mongo.insertTestLeftCountNew(propOne,runId,endpoint['_id'],0)
-          
+
         #literal
-        
+
         for clas , prop in [(clas,prop['property']) for clas in [err['class'] for err in  curEnd['error'] if 'class' in err] for prop in curEnd['propList']]:
             sparql.setQuery(q.getLeftPropCountLiteral(clas,prop).query)
             try:
@@ -722,7 +712,7 @@ def downloadPropLeftWithCountEasy(endpoint,q,sparql,runId):
         # pprint.pprint(propOne)
         if len(propOne)>0:
             mongo.insertTestLeftCountNew(propOne,runId,endpoint['_id'],1) 
-          
+
     # mongo.addTestLog(endpoint,{'phase':'extract_onto_class','status':'finish','time':datetime.datetime.now()}) 
     return anyError
 
@@ -734,7 +724,7 @@ def downloadPropRightWithCount(endpoint,q,sparql,runId):
     # binding Class left with count
     print("** Extract prop right")
     anyError = False
-    if 'classes' in curEnd:        
+    if 'classes' in curEnd:
         for clas in curEnd['classes']:
             countResults=0
             try:
@@ -744,7 +734,7 @@ def downloadPropRightWithCount(endpoint,q,sparql,runId):
 
                     results = sparql.queryAndConvert()
                     parsedRes=parseResponse(runId,results,'prop_right_count')
-    
+
                     if parsedRes is not None and len(parsedRes)>0:
                         print(endpoint['_id'])
                         print(currQuery)
@@ -824,11 +814,9 @@ def downloadDoubleInst(endpoint, q, sparql,runId):
             # print ""
             # pprint.pprint(clas['class'])
             sparql.setQuery(q.getDoubleInstantiation(clas['class']).query)
-            
             try:
                 results = sparql.queryAndConvert()
                 if parseResponse(runId,results,'double_inst',enableLog=False) is not None and len(parseResponse(runId,results,'double_inst',enableLog=False))>0:
-                    
                     # print q.getDoubleInstantiation(clas['class']).query
                     for cur in parseResponse(runId,results,'double_inst',enableLog=False):
                         if cur['c'] != clas['class']:
@@ -888,7 +876,6 @@ def findClusterInstances(endpoint, q, sparql,cluster,runId):
                             binding='.1'
                         else:
                             print(cur)
-                        
                         tmpSet=set(currentSet)
                         tmpSet.add(cur['c'])
                         #print listOfSets
@@ -899,8 +886,6 @@ def findClusterInstances(endpoint, q, sparql,cluster,runId):
                             #print cur[1]
                             couple.append({'cluster':tmpSet,'n':cur[binding]})
                             #print couple
-                        
-                        
         except:
             errorCount=errorCount+1
             logfun.exception("Something awful happened!")
@@ -929,7 +914,7 @@ def DoubleInstExtract(endpoint,q,sparql,runId):
             break
         else:
             co.extend(current)
-    if len(co) > 0:        
+    if len(co) > 0:
         mongo.addTestClusterNew(co,runId,endpoint['_id'])
     #pprint.pprint(co)
     #if aborted:
@@ -944,7 +929,7 @@ def Inizialier(endpoint):
     q = queryGenerator.QueryGenerator()
     sparql = SPARQLWrapper(endpoint['url'])
     sparql.setTimeout(300)
-    
+
     return endpoint,q,sparql
 
 
@@ -985,10 +970,10 @@ def ExtractSchema(endpoint,clustering=False,nClassLimit=100):
         else:
             mongo.addTestLogNew(runId,{'phase':'ClassPlusInstance','status':'finish','time':datetime.datetime.now()})
         # try to download list of properties + uses
-        
+
         print('**** Getting Properties  List *****')
         mongo.addTestLogNew(runId,{'phase':'PropListPlusCount','status':'start','time':datetime.datetime.now()})
-        if not downloadPropListPlusCount(endpoint,q,sparql,runId):            
+        if not downloadPropListPlusCount(endpoint,q,sparql,runId):
             mongo.addTestLogNew(runId,{'phase':'PropList','status':'start','time':datetime.datetime.now()})
             # try only prop
             if downloadPropList(endpoint,q,sparql,runId):
@@ -999,20 +984,19 @@ def ExtractSchema(endpoint,clustering=False,nClassLimit=100):
                     mongo.addTestLogNew(runId,{'phase':'PropListCount','status':'finish','time':datetime.datetime.now()})
         else:
             mongo.addTestLogNew(runId,{'phase':'PropListPlusCount','status':'finish','time':datetime.datetime.now()})
-                
+
         #if ike:
             ## download Ontological Info
-            #mongo.addTestLogNew(runId,{'phase':'extract_onto','status':'start','time':datetime.datetime.now()})          
+            #mongo.addTestLogNew(runId,{'phase':'extract_onto','status':'start','time':datetime.datetime.now()})
             #downloadIntensional(endpoint, q, sparql, False,runId)
             #mongo.addTestLogNew(runId,{'phase':'extract_onto','status':'finish','time':datetime.datetime.now()})
             ##TODO IMPROVING RICORSIVE SEARCH
-        
-        
+
         if mongo.getNClassLodex(runId) is not None and mongo.getNClassLodex(runId) < nClassLimit:
             """ extensional """
             # Extracting left right property
             #### left
-            mongo.addTestLogNew(runId,{'phase':'prop_left_count','status':'start','time':datetime.datetime.now()})      
+            mongo.addTestLogNew(runId,{'phase':'prop_left_count','status':'start','time':datetime.datetime.now()})
             if downloadPropLeftWithCount(endpoint,q,sparql,runId):
                 mongo.addTestLogNew(runId,{'phase':'prop_left_count_easy','status':'start','time':datetime.datetime.now()})
                 if not downloadPropLeftWithCountEasy(endpoint,q,sparql,runId):
@@ -1027,7 +1011,7 @@ def ExtractSchema(endpoint,clustering=False,nClassLimit=100):
                     mongo.addTestLogNew(runId,{'phase':'prop_right_count_easy','status':'finish','time':datetime.datetime.now()})
             else:
                 mongo.addTestLogNew(runId,{'phase':'prop_right_count','status':'finish','time':datetime.datetime.now()})
-            
+
             if clustering:
                 """ Clustering ex """
                 mongo.addTestLogNew(runId,{'phase':'clustClasses','status':'start','time':datetime.datetime.now()})

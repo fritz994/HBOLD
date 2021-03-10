@@ -3,7 +3,8 @@
 
 import sys
 import pymongo as pm
-import extractor.PostProcesingClusteredV4 as pp
+import extractor.PostProcesingClusteredV3 as pp
+#import extractor.PostProcesingClusteredV4 as pp
 
 dbLodex= pm.MongoClient().lodex
 
@@ -12,18 +13,18 @@ def generateCSforAllEnd():
     print(len(ids))
 
     for id in ids:
-        pp.postProcForId(id)
+        pp.postProcForIdCluster(id)
 
 
 def generateCSforEnd(id):
-    pp.postProcForId(id)
+    pp.postProcForIdCluster(id)
 
 
 def generateCS(argv):
-    if 'all' == argv[0]:
+    if 'all' == argv:
         generateCSforAllEnd()
-    elif isinstance(argv[0], int):
-        generateCSforEnd(int(argv[0]))
+    elif isinstance(int(argv), int):
+        generateCSforEnd(int(argv))
     else:
         print("Bad input for the generation of cluster schema... a number or the string 'all' is required as input")
 

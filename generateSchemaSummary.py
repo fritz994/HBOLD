@@ -1,8 +1,6 @@
 import sys
 import pymongo as pm
-import extractor.PostProcesingCulsteredV3 as pp
-#import extractor.PostProcesingClusteredV4 as pp4
-
+import extractor.PostProcesingClusteredV3 as pp
 
 dbLodex = pm.MongoClient().lodex
 
@@ -32,20 +30,21 @@ def generateSSforEndById(id):
 
 
 def generateSS(argv):
-    if 'all' == argv[0]:
+    if 'all' == argv:
         generateSSforAllEnd()
-    elif isinstance(argv[0], int):
-        generateSSforEndById(int(argv[0]))
+    elif isinstance(int(argv), int):
+        generateSSforEndById(int(argv))
     else:
         print("Bad input for generation of the schema summary... a number or the string 'all' is required")
 
 
 if __name__ == "__main__":
+    print(sys.argv[1:])
     if len(sys.argv) == 2 and sys.argv[1] == "all":
         generateSchemas("all")
-    elif all(isinstance(x, int) for x in sys.argv[1:]):
+    elif all(isinstance(int(x), int) for x in sys.argv[1:]):
         for x in sys.argv[1:]:
-            generateSchemas(x)
+            generateSchemas(int(x))
     else:
         print("Usage --> generateSchemaSummary.py \"all\" \n or generateSchemaSummary digit [other digits]")
         exit()

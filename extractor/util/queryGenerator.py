@@ -167,14 +167,14 @@ class QueryGenerator:
     def dataEuDownload(self):
         return Query(("PREFIX dcat: <http://www.w3.org/ns/dcat#> PREFIX dc: <http://purl.org/dc/terms/>"),("SELECT ?datasetURI ?title ?url WHERE { ?datasetURI a dcat:Dataset. ?datasetURI dc:title ?title. ?datasetURI dcat:distribution ?o .?o dcat:accessURL ?url. filter(regex(?url, 'sparql')) } "),[])
 
-    
+
 ####################
 #    DBPEDIA
 ###################
-    
+
     def getSubjectTriples(self,uri):
         return Query(("SELECT ?p ?o "),(" WHERE { <"+uri+"> ?p ?o. } "),['?p','?s'])
-    
+
     def getObjectTriples(self,uri):
         return Query(("SELECT ?s ?p "),(" WHERE { ?s ?p <"+uri+">. } "),['?p','?o'])
     
@@ -286,14 +286,13 @@ class QueryGenerator:
             queryList.append((Query(header,body1,params),current1))
             queryList.append((Query(header,body2,params),current2))
         return queryList
-    
+
 def main():
     q = QueryGenerator()
-    
+
     for a in q.getVoidQuery():
         pprint.pprint(a.query)
-    
-    
+
 if __name__ == '__main__':
     main()
 

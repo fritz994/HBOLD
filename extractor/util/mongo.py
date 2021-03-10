@@ -715,6 +715,7 @@ def updateLodexDatasets(end, datasets_list):
 def getAllEndopoinLodex():
     client = pm.MongoClient()
     db=client.lodex
+    #for e in db.endpoints.find({},no_cursor_timeout=True).sort("_id", 1).skip(700):
     for e in db.endpoints.find({}).sort("_id", 1):
         yield e
 

@@ -25,6 +25,7 @@ def threadProcess(endId):
                 print("Thread " + t.getName() + " terminated")
                 threads.remove(t)
 
+
 def endpointExtraction(id):
     p = mongo.getExtById(id)
 
@@ -35,7 +36,8 @@ def endpointExtraction(id):
         threadProcess(id)
     else:
         e = mongo.getLastRunById(id)
-        if (datetime.datetime.now()-e['date']).days >= 2:
+        print(e)
+        if 'date' not in e or (datetime.datetime.now()-e['date']).days >= 2:
             threadProcess(id)
 
     for t in threads:
@@ -44,32 +46,45 @@ def endpointExtraction(id):
 
 
 def automaticExtraction(argv):
-    if(argv[0] == 'all'):
+    print(argv)
+    if(argv == 'all'):
         for end in mongo.getAllEndopoinLodex():
+            print(f"Index extraction for {end['url']}")
             endpointExtraction(end['_id'])
-
-            print("Generating schema summary")
+            print(f"Generating schema summary for {end['url']}")
             generateSS(end['_id'])
+            print(f"Generating cluster schema for {end['url']}")
             generateCS(end['_id'])
 
-    elif isinstance(argv[0], str):
-        url = argv[0]
+    elif isinstance(argv, str):
+        url = argv
         end = mongo.getEndopointByUrl(url)
+        if end is None:
+            print(f"No endpoint found in the database. Consider uploading {url} through the addManuallyDataset utils")
+            return
+
         p = mongo.getExtById(end['_id'])
 
+        print(f"Index extraction for {url}")
         endpointExtraction(end['_id'])
-
-        print("Generating schema summary ")
-        generateSS([(end['_id'])])
-        generateCS([(end['_id'])])
+        print(f"Generating schema summary for {url}")
+        generateSS(end['_id'])
+        print(f"Generating cluster schema for {url}")
+        generateCS(end['_id'])
     else:
         print("Something awful happened")
 
 
 
 def main(argv):
-    automaticExtraction(["all"])
-
+    print(argv)
+    if len(argv)==0:
+        print("all")
+        automaticExtraction("all")
+    else:
+        for el in argv:
+            print(el)
+            automaticExtraction(el)
 
 if __name__ == "__main__":
     main(sys.argv[1:])

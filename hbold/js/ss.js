@@ -1772,7 +1772,6 @@ QueryInterface.prototype.addOrder = function() {
     this.queryChanged();
     this.ordCond = true;
 }
-
 QueryInterface.prototype.attSelChanged = function() {
     if (this.attSel != null) {
         var indexClas = this.getClasVizinxContainAttPar(this.attrPar[this.attSel]);
@@ -2034,7 +2033,7 @@ QueryInterface.prototype.updateQuery = function() {
             .chartFunction("google.visualization.Table")
             .draw(document.getElementById("resultViz"));
     }
-        Q.onFail(function(d){alert("The server is not responding or the request has been blocked for CORS errors");console.log(d)});
+        Q.onFail(function(d){alert("The server is not responding");console.log(d)});
     //    this.async(this.getCount);
     console.log("terminata updateQuery")
 }
@@ -2176,7 +2175,7 @@ $("#launchQuery").click(function() {
     q.ss = datag;
 
     //q.proxy = "http://apollo-new.ing.unimore.it:8891/";
-    q.proxy = "https://dbgroup.ing.unimore.it/hbold/proxy";
+    q.proxy = "https://dbgroup.ing.unimore.it/hbold/proxy/";
     //q.proxy = "http://localhost:8891/";
     qo.curQCN = gq.curQCN;
     qo.getQuery(); // guarda tesi bernardotti, sembra non definita qui, forse inutile
