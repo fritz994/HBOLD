@@ -12,23 +12,24 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css"/>
 	<link rel="stylesheet" type="text/css" href="css/hbold.css"/>
     <link rel="shortcut icon" href="">
-
+<!--
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>    
     <script type="text/javascript">
         google.load("jquery", "1");
         google.setOnLoadCallback(function(){});
     </script>
+-->
 
-
-<style>
-.disabled {
-    pointer-events:none;
-}
-body {
-    background-image:none
-}
-       </style>
+    <style>
+    .disabled {
+        pointer-events:none;
+    }
+    body {
+        background-image:none
+    }
+    </style>
 </head>
+
 <body>
 
 <!--     Barra Iniziale  -->
@@ -76,7 +77,7 @@ body {
 
                     <tr class="tr-fixed">
                         <th> <a>Dataset Name</a></th>
-                        <th> <a>Triples</a></th>
+                        <th> <a>Triples</a> </th>
                         <th> <a>Classes</a></th>
                         <th> <a>Properties</a> </th>
                         <th> <a>Instances</a> </th>
@@ -137,12 +138,11 @@ body {
         {{#each data}}
         <tr>
             <!-- serie di <td> che inseriscono i vari campi dei dataset -->
-            <td align="left"> {{name}} </td>
-            <td align="right"> {{triples}} </td>
-            <td align="right"> {{classesCount}} </td>
-            <td align="right"> {{propCount}} </td>
-            <td align="right"> {{instances}} </td>
-
+            <td align="left"> {{name}} <br> <a href={{uri}} style="font-size:12px">{{uri}}</a></h7></td>
+            <td align="right" style="vertical-align:middle"> {{triples}} </td>
+            <td align="right" style="vertical-align:middle"> {{classesCount}} </td>
+            <td align="right" style="vertical-align:middle"> {{propCount}} </td>
+            <td align="right" style="vertical-align:middle"> {{instances}} </td>
 
             <!-- <td> che inserisce i bottoni di SS e CS -->
             <td align="right">
@@ -164,7 +164,7 @@ body {
 
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
-    <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+    <script type="text/javascript" src="https://d3js.org/d3.v3.min.js"></script>
 
 
 
