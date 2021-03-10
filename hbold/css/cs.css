@@ -144,4 +144,24 @@ div {
     display: table;
     margin-right: auto;
     margin-left: auto;
-  }
+}
+
+#refer{
+	text-align: center;
+}
+#refer ul {
+	text-align:center;
+	width: 100%;
+
+}
+#refer ul li {
+    display:inline-block;
+    position: relative;
+    /* float: left; */
+    height: auto;
+    width: 150px;
+    padding: 0;
+    margin:0 60px;
+    text-align: center;
+
+}

@@ -1,46 +1,15 @@
-<!DOCTYPE html>
-<meta charset="utf-8">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
-  integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<link rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css" />
+{% extends "base_template.html" %}
+
 {% block additional_css %}
-<link rel="stylesheet" type="text/css" href="../css/treemap.css">
+<link rel="stylesheet" type="text/css" href="../css/cs.css">
+
 
 {% end %}
-<style>
 
-#refer{
-	text-align: center;
-}
-#refer ul {
-	text-align:center;
-	width: 100%;
-
-}
-#refer ul li {
-    display:inline-block;
-    position: relative;
-    /* float: left; */
-    height: auto;
-    width: 150px;
-    padding: 0;
-    margin:0 60px;
-    text-align: center;
-
-}
-
-</style>
-
-<body>
+{% block content %}
   <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
         <ul class="nav navbar-nav" id="myTab" role="tablist">
-          
             <div id="main">
                 <span style="font-size:30px;cursor:pointer" onclick="openNav()" class="btn3 fa fa-bars" role="button"></span>
             </div>
@@ -66,7 +35,6 @@
   <div class="container" id="refer">
 
         <ul class="nav navbar-nav" id="myTab" role="tablist" >
-           
             <li class="nav-item">
                 <a class="navbar-brand nav-link " id="graph-tab" data-toggle="tab" href="#graph" role="tab" aria-controls="profile" aria-selected="false">Graph</a>
             </li>
@@ -129,12 +97,9 @@
       <label><input type="radio" name="mode" value="sumByCount"> Count</label>
     </form>
   </div>
+{% end %}
 
+{% block additional_js %}
   <script src="https://d3js.org/d3.v4.min.js"></script>
-  <script type="text/javascript" src="../js/jquery.min.js"></script>
-
-
-  {% block additional_js %}
   <script src="../js/treemap.js"></script>
-
-  {% end %}
+{% end %}

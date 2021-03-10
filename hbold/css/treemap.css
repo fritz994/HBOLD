@@ -1,17 +1,24 @@
-
 body{
     padding-top: 70px;
     text-align:center;
-    width: 100%;
-      height: 100%;
+    overflow: auto;
+
       background-image: url("https://www.transparenttextures.com/patterns/graphy.png")
   }
-  svg{
+#chart {
+	height: 100%;
+    width: 100%;
+    overflow: auto;
+}
+#chart svg{
     padding-top: 10px;
-    position: relative;
-   margin-left: 15%;
-  }
 
+    width: 45%;
+    height: 45%;
+    overflow: auto;
+    position: relative;
+    margin-left: 20%;
+}
 #dataset {
 	padding: 15px 0;
 }
@@ -97,13 +104,6 @@ body{
 	}
 }
 
-#chart {
-	height: 600px;
-	width: 100%;
-}
-#chart svg {
-	width: 100%;
-}
 
 table.dataTable {
 	clear: both;

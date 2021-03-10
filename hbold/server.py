@@ -108,7 +108,7 @@ class MainHandlerOk(tornado.web.RequestHandler):
         #https://stackoverflow.com/questions/17284286/disable-template-processing-in-tornadoweb
         #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
         #self.render('LODeX_template.html', loader = template.BaseLoader)
-        with open('LODeX.html', 'r') as file:
+        with open('template/LODeX.html', 'r') as file:
             self.write(file.read())
 
 class SchemaSummary(tornado.web.RequestHandler):
@@ -117,7 +117,7 @@ class SchemaSummary(tornado.web.RequestHandler):
         #https://stackoverflow.com/questions/17284286/disable-template-processing-in-tornadoweb
         #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
         print('Creato SS con id ',endpoint_id)
-        self.render('ss.html')
+        self.render('template/ss.html')
 
 class HiericalSS(tornado.web.RequestHandler):
     def get(self,endpoint_id):
@@ -125,14 +125,14 @@ class HiericalSS(tornado.web.RequestHandler):
         #https://stackoverflow.com/questions/17284286/disable-template-processing-in-tornadoweb
         #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
         print('Creato SS con id ',endpoint_id)
-        self.render('sshier.html')
+        self.render('template/sshier.html')
 class TreemapCS(tornado.web.RequestHandler):
     def get(self,endpoint_id):
         self.set_header('Content-Type', '') # I have to set this header 
         #https://stackoverflow.com/questions/17284286/disable-template-processing-in-tornadoweb
         #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
         print('Creato SS con id ',endpoint_id)
-        self.render('treemap.html')
+        self.render('template/treemap.html')
 
 
 # classe che viene chiamata quando si espande il cluster schema
@@ -141,7 +141,7 @@ class ExploreSS(tornado.web.RequestHandler):
         self.set_header('Content-Type', '') # I have to set this header 
         #https://stackoverflow.com/questions/17284286/disable-template-processing-in-tornadoweb
         #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
-        self.render('exploreSS.html')
+        self.render('template/exploreSS.html')
 
 class ClusterSchema(tornado.web.RequestHandler):
     def get(self,endpoint_id):
@@ -149,7 +149,7 @@ class ClusterSchema(tornado.web.RequestHandler):
         #https://stackoverflow.com/questions/17284286/disable-template-processing-in-tornadoweb
         #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
         print('Creato CS con id ',endpoint_id)
-        self.render('cs.html')
+        self.render('template/cs.html')
 
 class SunburstCS(tornado.web.RequestHandler):
     def get(self,endpoint_id):
@@ -157,21 +157,20 @@ class SunburstCS(tornado.web.RequestHandler):
         #https://stackoverflow.com/questions/17284286/disable-template-processing-in-tornadoweb
         #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
         print('Creato CS con id ',endpoint_id)
-        self.render('sunburst.html')
+        self.render('template/sunburst.html')
 class CirclePackCS(tornado.web.RequestHandler):
     def get(self,endpoint_id):
         self.set_header('Content-Type', '') # I have to set this header 
         #https://stackoverflow.com/questions/17284286/disable-template-processing-in-tornadoweb
         #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
         print('Creato CS con id ',endpoint_id)
-        self.render('circlepack.html')
+        self.render('template/circlepack.html')
 class About(tornado.web.RequestHandler):
     def get(self):
         self.set_header('Content-Type', '') # I have to set this header 
         #https://stackoverflow.com/questions/17284286/disable-template-processing-in-tornadoweb
         #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
-        self.render('about.html')
-        #self.render('about.html')
+        self.render('template/about.html')
 
 # associata a ./index
 class IndexDatasetHandler(tornado.web.RequestHandler):
@@ -227,14 +226,14 @@ class IndexDatasetHandlerFull(tornado.web.RequestHandler):
  
 class GraphHandler(tornado.web.RequestHandler):
     def get(self, endpoint_id):
-        self.render('insertDataset.html')
+        self.render('template/insertDataset.html')
 
 
 # parte nuova
 class InsertDataset(tornado.web.RequestHandler):
     def get(self):
         self.set_header('Content-Type', '')
-        self.render('insertDataset.html')
+        self.render('template/insertDataset.html')
 
 
 class Inserting(tornado.web.RequestHandler):
@@ -628,6 +627,7 @@ if __name__ == "__main__":
         #(r'/js/(.*)', tornado.web.StaticFileHandler, {'path': './js'}),
         (r'/hbold/js/(.*)', tornado.web.StaticFileHandler, {'path': './js'}),
         (r'/hbold/css/(.*)', tornado.web.StaticFileHandler, {'path': './css'}),
+        (r'/hbold/template/(.*)', tornado.web.StaticFileHandler, {'path': './template'}),
         (r"/hbold/([0-9]+)", GraphHandler),    #non funziona, sembra ci siano problemi su LODeX.html (riga 362, su "each data")
         (r"/hbold/getDataSS/([0-9]+)", DataHandlerSS),
         (r"/hbold/getDataCS/([0-9]+)", DataHandlerCS),

@@ -1,36 +1,7 @@
-<!doctype html>
-
-<html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Fogli di stile -->
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css"/>
-	<link rel="stylesheet" type="text/css" href="css/hbold.css"/>
-    <link rel="shortcut icon" href="">
-
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>    
-    <script type="text/javascript">
-        google.load("jquery", "1");
-        google.setOnLoadCallback(function(){});
-    </script>
+{% extends "base_template.html" %}
 
 
-<style>
-.disabled {
-    pointer-events:none;
-}
-body {
-    background-image:none
-}
-       </style>
-</head>
-<body>
-
+{% block content %}
 <!--     Barra Iniziale  -->
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
@@ -39,8 +10,8 @@ body {
                   <div id="myNav" class="overlay" style>
                       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
                       <div class="overlay-content">
-                        <a href="./about">About</a>
-                        <a href="./insertDataset/">Dataset Insertion</a>
+                        <a href="/hbold/about">About</a>
+                          <a href="/hbold/insertDataset">Dataset Insertion</a>
                       </div>
                     </div>
                 </form>
@@ -73,14 +44,13 @@ body {
         <div class="tab-pane fade show active" id="dataset" role="tabpanel" aria-labelledby="dataset-tab">
             <table class="table table-hover" id="myTable">
                 <thead>
-
                     <tr class="tr-fixed">
                         <th> <a>Dataset Name</a></th>
                         <th> <a>Triples</a></th>
-                        <th> <a>Classesr</a></th>
-                        <th> <a>Properties</a> </th>
-                        <th> <a>Instances</a> </th>
-                        <th>Actions</th>
+                        <th> <a>Class Number</a></th>
+                        <th> <a>Properties Number</a> </th>
+                        <th> <a>Instance Number</a> </th>
+                        <th>Azioni</th>
                     </tr>
                 </thead>
 
@@ -134,18 +104,20 @@ body {
 
         <!-- script legato sempre ai dataset, per ogni dataset popola la tabella con nomi,triple,...  -->
     <script id="template-dataset-elements" type="text/template7" >
-        {{#each data}}
+				    console.log(data)
+
+		{{#each data}}
         <tr>
             <!-- serie di <td> che inseriscono i vari campi dei dataset -->
-            <td align="left"> {{name}} </td>
-            <td align="right"> {{triples}} </td>
-            <td align="right"> {{classesCount}} </td>
-            <td align="right"> {{propCount}} </td>
-            <td align="right"> {{instances}} </td>
+            <td> {{name}} </td>
+            <td> {{triples}} </td>
+            <td> {{classesCount}} </td>
+            <td> {{propCount}} </td>
+            <td> {{instances}} </td>
 
 
             <!-- <td> che inserisce i bottoni di SS e CS -->
-            <td align="right">
+            <td>
                 <div class="btn-group" role="group" aria-label="Basic example">
                     <button type="button" class="ssbtn btn btn-success" data-id="{{ id }}">SS</button>
                     <button type="button" class="csbtn btn btn-danger" data-id="{{ id }}">CS</button>
@@ -156,30 +128,6 @@ body {
     </script>
 
 
-    <!-- jQuery e plugin JavaScript  -->
-    <script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/template7.min.js"></script>
-    <script src="js/datatables.min.js"></script>
-
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
-    <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
-
-
-
-<!-- script che attiva la barra di navigazione in alto
-     è presente in tutti i file, forse si può scrivere una volta sola e risparmiare un po' di codice -->
-    <script>
-		function openNav() {
-			document.getElementById("myNav").style.width = "100%";
-		}
-	  
-		function closeNav() {
-			document.getElementById("myNav").style.width = "0%";
-		}
-    </script>
-
         <!-- la richiesta ajax va sull'url index e permette di popolare la tabella dei dataset -->
         <!-- dataype: json è il tipo di dato che si riceve con la richiesta -->
         <!-- index.html è un file contenente questo script copiaincollato; a cosa serve index.html? -->
@@ -189,6 +137,8 @@ body {
         url: './index',
         dataType: 'json',
         success: function(data) {
+		    console.log(data)
+
 			var template = $('#template-dataset-elements').html();
 			var compiledTemplate = Template7.compile(template);                        // tre linee che inseriscono effettivamente i dati nella tabella
             $('#dataset-elements').html(compiledTemplate(data));
@@ -233,11 +183,10 @@ body {
 
         <script>
             $('#goToManInsert').click(function(){
-               location.href = "/hbold/insertDataset/";
+               location.href = "/hbold/insertDataset";
             });
         </script>
 
     </div>
-</body>
 
-</html>
+{% end %}

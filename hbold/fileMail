@@ -1,6 +1,218 @@
-5de7d97b49a1e208a7bc9b1d
+604937dd2f82164428e4ce10
 SELECT ?s ?p ?o    WHERE {?s ?p ?o} LIMIT 1
+[{'url': 'https://trafair.eu/sparql', '_id': 1, 'name': 'trafair.eu/sparql'}]
+Thread Thread-1 terminated
+SELECT ?s ?p ?o    WHERE {?s ?p ?o} LIMIT 1
+1
+SELECT (COUNT(?s) as ?no)  WHERE { ?s ?p ?o. } 
+1
+SELECT (COUNT (DISTINCT ?class) as ?no)    WHERE { ?s a  ?class }
+1
+SELECT (COUNT( ?s) AS ?no)    { ?s a ?Class  }
+1
+SELECT DISTINCT ?class (COUNT(?s) as ?no)    WHERE {?s a ?class} GROUP BY ?class
+**** Getting Properties  List *****
+1
+SELECT ?p (COUNT(?s) as ?no)  WHERE { ?s ?p ?o } GROUP BY ?p
+** Extract prop left no prop
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.openlinksw.com/schemas/virtrdf#array-of-QuadMap>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://rs.tdwg.org/dwc/terms/LivingSpecimen>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.openlinksw.com/schemas/virtrdf#QuadMap>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.openlinksw.com/schemas/virtrdf#QuadMapFText>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://linkedevents.org/ontology/Event>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://linkedgeodata.org/meta/Node>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.disit.org/km4city/schema#Road>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.openlinksw.com/schemas/virtrdf#array-of-QuadMapFormat>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.openlinksw.com/schemas/virtrdf#QuadMapATable>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://linkedgeodata.org/meta/Way>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.w3.org/ns/sparql-service-description#Service>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://dbpedia.org/ontology/Place>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.disit.org/km4city/schema#TrafficObservation>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.w3.org/2000/01/rdf-schema#Class>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.w3.org/2002/07/owl#AnnotationProperty>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://purl.org/dc/terms/RightsStatement>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.openlinksw.com/schemas/virtrdf#QuadMapColumn>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.w3.org/2002/07/owl#OntologyProperty>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://rs.tdwg.org/dwc/terms/MeasurementOrFact>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.openlinksw.com/schemas/virtrdf#QuadStorage>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.w3.org/2002/07/owl#Ontology>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.openlinksw.com/schemas/Archive#>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.w3.org/2004/02/skos/core#Concept>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://linkedgeodata.org/ontology/Tree>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.w3.org/2000/01/rdf-schema#member>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.disit.org/km4city/schema#SensorSite>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.openlinksw.com/schemas/virtrdf#array-of-QuadMapATable>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.openlinksw.com/schemas/virtrdf#array-of-string>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.w3.org/2002/07/owl#Class>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.openlinksw.com/schemas/virtrdf#QuadMapValue>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://purl.org/dc/terms/Location>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.openlinksw.com/schemas/virtrdf#array-of-QuadMapColumn>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.geonames.org/ontology#Feature>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.w3.org/ns/dcat#Dataset>. ?s ?p ?o. FILTER (!isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://rs.tdwg.org/dwc/terms/LivingSpecimen>. ?s ?p ?o. FILTER (isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat>. ?s ?p ?o. FILTER (isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.openlinksw.com/schemas/virtrdf#QuadMap>. ?s ?p ?o. FILTER (isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.openlinksw.com/schemas/virtrdf#QuadMapFText>. ?s ?p ?o. FILTER (isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://linkedevents.org/ontology/Event>. ?s ?p ?o. FILTER (isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.openlinksw.com/schemas/virtrdf#QuadMapATable>. ?s ?p ?o. FILTER (isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property>. ?s ?p ?o. FILTER (isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.disit.org/km4city/schema#TrafficObservation>. ?s ?p ?o. FILTER (isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.w3.org/2000/01/rdf-schema#Class>. ?s ?p ?o. FILTER (isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.w3.org/2002/07/owl#AnnotationProperty>. ?s ?p ?o. FILTER (isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://purl.org/dc/terms/RightsStatement>. ?s ?p ?o. FILTER (isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.openlinksw.com/schemas/virtrdf#QuadMapColumn>. ?s ?p ?o. FILTER (isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.w3.org/2002/07/owl#OntologyProperty>. ?s ?p ?o. FILTER (isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://rs.tdwg.org/dwc/terms/MeasurementOrFact>. ?s ?p ?o. FILTER (isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.w3.org/2002/07/owl#Ontology>. ?s ?p ?o. FILTER (isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.openlinksw.com/schemas/Archive#>. ?s ?p ?o. FILTER (isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.w3.org/2004/02/skos/core#Concept>. ?s ?p ?o. FILTER (isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://linkedgeodata.org/ontology/Tree>. ?s ?p ?o. FILTER (isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.disit.org/km4city/schema#SensorSite>. ?s ?p ?o. FILTER (isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.w3.org/2002/07/owl#Class>. ?s ?p ?o. FILTER (isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag>. ?s ?p ?o. FILTER (isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.openlinksw.com/schemas/virtrdf#QuadMapValue>. ?s ?p ?o. FILTER (isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://purl.org/dc/terms/Location>. ?s ?p ?o. FILTER (isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.geonames.org/ontology#Feature>. ?s ?p ?o. FILTER (isLiteral(?o)) } GROUP BY ?p
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s a <http://www.w3.org/ns/dcat#Dataset>. ?s ?p ?o. FILTER (isLiteral(?o)) } GROUP BY ?p
+** Extract prop right
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s ?p ?o. ?o a <http://www.openlinksw.com/schemas/virtrdf#array-of-QuadMap>} GROUP BY ?p 
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s ?p ?o. ?o a <http://rs.tdwg.org/dwc/terms/LivingSpecimen>} GROUP BY ?p 
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s ?p ?o. ?o a <http://www.openlinksw.com/schemas/virtrdf#QuadMapFormat>} GROUP BY ?p 
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s ?p ?o. ?o a <http://www.openlinksw.com/schemas/virtrdf#QuadMap>} GROUP BY ?p 
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s ?p ?o. ?o a <http://www.openlinksw.com/schemas/virtrdf#QuadMapFText>} GROUP BY ?p 
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s ?p ?o. ?o a <http://linkedevents.org/ontology/Event>} GROUP BY ?p 
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s ?p ?o. ?o a <http://linkedgeodata.org/meta/Node>} GROUP BY ?p 
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s ?p ?o. ?o a <http://www.disit.org/km4city/schema#Road>} GROUP BY ?p 
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s ?p ?o. ?o a <http://www.openlinksw.com/schemas/virtrdf#array-of-QuadMapFormat>} GROUP BY ?p 
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s ?p ?o. ?o a <http://www.openlinksw.com/schemas/virtrdf#QuadMapATable>} GROUP BY ?p 
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s ?p ?o. ?o a <http://linkedgeodata.org/meta/Way>} GROUP BY ?p 
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s ?p ?o. ?o a <http://www.w3.org/ns/sparql-service-description#Service>} GROUP BY ?p 
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s ?p ?o. ?o a <http://dbpedia.org/ontology/Place>} GROUP BY ?p 
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s ?p ?o. ?o a <http://www.w3.org/2000/01/rdf-schema#Class>} GROUP BY ?p 
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s ?p ?o. ?o a <http://purl.org/dc/terms/RightsStatement>} GROUP BY ?p 
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s ?p ?o. ?o a <http://www.openlinksw.com/schemas/virtrdf#QuadMapColumn>} GROUP BY ?p 
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s ?p ?o. ?o a <http://rs.tdwg.org/dwc/terms/MeasurementOrFact>} GROUP BY ?p 
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s ?p ?o. ?o a <http://www.openlinksw.com/schemas/virtrdf#QuadStorage>} GROUP BY ?p 
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s ?p ?o. ?o a <http://www.w3.org/2004/02/skos/core#Concept>} GROUP BY ?p 
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s ?p ?o. ?o a <http://linkedgeodata.org/ontology/Tree>} GROUP BY ?p 
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s ?p ?o. ?o a <http://www.w3.org/2000/01/rdf-schema#member>} GROUP BY ?p 
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s ?p ?o. ?o a <http://www.disit.org/km4city/schema#SensorSite>} GROUP BY ?p 
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s ?p ?o. ?o a <http://www.openlinksw.com/schemas/virtrdf#array-of-QuadMapATable>} GROUP BY ?p 
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s ?p ?o. ?o a <http://www.openlinksw.com/schemas/virtrdf#array-of-string>} GROUP BY ?p 
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s ?p ?o. ?o a <http://www.w3.org/2002/07/owl#Class>} GROUP BY ?p 
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s ?p ?o. ?o a <http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag>} GROUP BY ?p 
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s ?p ?o. ?o a <http://www.openlinksw.com/schemas/virtrdf#QuadMapValue>} GROUP BY ?p 
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s ?p ?o. ?o a <http://purl.org/dc/terms/Location>} GROUP BY ?p 
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s ?p ?o. ?o a <http://www.openlinksw.com/schemas/virtrdf#array-of-QuadMapColumn>} GROUP BY ?p 
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s ?p ?o. ?o a <http://www.geonames.org/ontology#Feature>} GROUP BY ?p 
+1
+SELECT (COUNT(?p) as ?no) ?p  WHERE { ?s ?p ?o. ?o a <http://www.w3.org/ns/dcat#Dataset>} GROUP BY ?p 
+Generating schema summary 
+endpoint id : 1 loading...
+endpoint id : 1
+trafair.eu/sparql
+start time : 1615411196.3008804
+start normal
+end normal
+--- 0.012992143630981445 seconds ---
+total time
+--- 0.04596877098083496 seconds ---
+inserito cluster schema per il dataset 1
 -----
-http://aemet.linkeddata.es/sparql e' un endpoint valido, 
-ma e' gia' presente in MongoDB; non lo aggiungo.
-L'estrazione viene evitata in quanto sarebbe inutile.
+https://trafair.eu/sparql is a valid endpoint and it is not present on our server.
+Extraction ended correctly.

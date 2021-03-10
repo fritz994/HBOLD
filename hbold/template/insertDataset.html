@@ -1,0 +1,114 @@
+{% extends "base_template.html" %}
+
+	{% block additional_css %}
+		<style>
+			div.parent {
+				width: 360px;
+				border: 5px solid black;
+				margin: 0 auto;
+			}
+
+			form.form-horizontal {
+				width: 350px;
+				top: 10px;
+				left: 10px;
+				padding: 2px;
+				border: 1px solid blue;
+				display: inline-block;
+				background: #F0FFFF;
+			}
+		</style>
+	{% end %}
+
+
+{% block content %}
+
+ <!-- Barra iniziale-->
+ <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <ul class="nav navbar-nav" id="myTab" role="tablist">
+                    <form class="form-inline my-2 my-lg-0">
+                        <div id="myNav" class="overlay" style>
+                            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                            <div class="overlay-content">
+								<a href="../about">About</a>
+                                <a href="../insertDataset/">Dataset Insertion</a>
+							</div>
+                        </div>
+                    </form>
+                    <div id="main">
+                        <span style="font-size:30px;cursor:pointer" onclick="openNav()" class="btn3 fa fa-bars" role="button"></span>
+                    </div>
+
+                    <li class="nav-item">
+                        <a class="navbar-brand nav-link" id="dataset-tab" data-toggle="tab" href="#dataset" role="tab" aria-controls="home"
+                           aria-selected="true">H-Bold
+                          <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="navbar-brand nav-link active" id="graph-tab" data-toggle="tab" href="" role="tab" aria-controls="profile" aria-selected="false">Dataset Insertion</a>
+
+                    </li>
+<!--
+                    <li class="nav-item">
+                        <a class="navbar-brand nav-link" id="query-tab" data-toggle="tab" href="#query" role="tab" aria-controls="contact" aria-selected="false">Query Panel</a>
+                    </li>
+-->
+                </ul>
+
+            </div>
+ </nav>
+
+
+<div class="mx-auto">
+   <div class="parent">
+       <form class="form-horizontal" id="myForm" action="">
+           <div class="form-group">
+               <label class="control-label col-sm-2" for="email">Email:</label>
+               <div class="col-sm-10">
+                   <input type="email" class="form-control" id="email" placeholder="Enter email">
+               </div>
+           </div>
+           <div class="form-group">
+               <label class="control-label col-sm-2">Endpoint:</label>
+               <div class="col-sm-10">
+                   <input class="form-control" id="endpoint" placeholder="Enter SPARQL endpoint">
+               </div>
+           </div>
+           <!--
+		   <div class="form-group">
+               <label class="control-label col-sm-2">Refresh:</label>
+               <div class="col-sm-10">
+                   <div class="form-check">
+                       <input type="checkbox" heigth="30px" class="form-check-input" id="check1">
+                       <label class="form-check-label" for="materialUnchecked"> www.europeandataportal.eu </label>
+                   </div>
+                   <div class="form-check">
+                       <input type="checkbox" heigth="30px" class="form-check-input" id="check2">
+                       <label class="form-check-label" for="materialUnchecked"> io.datascience-paris-saclay.fr </label>
+                   </div>
+                   <div class="form-check">
+                       <input type="checkbox" heigth="30px" class="form-check-input" id="check3">
+                       <label class="form-check-label" for="materialUnchecked"> data.europa.eu</label>
+                   </div>
+               </div>
+           </div>
+		   -->
+           <div class="form-group">
+               <div class="col-sm-offset-2 col-sm-10">
+                   <button type="submit" class="btn btn-default" formaction="javascript: submitForm()">Submit</button>
+               </div>
+           </div>
+       </form>
+   </div><br>
+    <div class="container">
+        <span style="font-size:30px"> <p><center>H-BOLD analyzes the provided URL and, if it is found a valid SPARQL endpoint, H-BOLD extracts its structure. At the end of the execution, the result of the operation will be sent through an e-mail to the provided e-mail address.</center></p> </span>
+    </div>
+</div>
+
+{% end %}
+
+{% block additional_js %}
+	<script type="text/javascript" src="../js/insertDataset.js"></script>
+{% end %}
