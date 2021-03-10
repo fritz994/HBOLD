@@ -1,0 +1,114 @@
+{% extends "base_template.html" %}
+
+{% block additional_css %}
+
+<link rel="stylesheet" type="text/css" href="../css/cs.css">
+
+<style>
+
+circle {
+  fill: rgb(31, 119, 180);
+  fill-opacity: .25;
+  stroke: rgb(31, 119, 180);
+  stroke-width: 1px;
+}
+
+.leaf circle {
+  fill: #ff7f0e;
+  fill-opacity: 1;
+}
+
+text {
+  font: 10px sans-serif;
+  text-anchor: middle;
+}
+
+</style>
+{% end %}
+
+{% block content %}
+  <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <ul class="nav navbar-nav" id="myTab" role="tablist">
+            <div id="main">
+                <span style="font-size:30px;cursor:pointer" onclick="openNav()" class="btn3 fa fa-bars" role="button"></span>
+            </div>
+            <li class="nav-item">
+                <a class="navbar-brand nav-link " id="dataset-tab" data-toggle="tab" href="#dataset" role="tab" aria-controls="home"
+                    aria-selected="true">H-Bold
+                <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="navbar-brand nav-link active"  data-toggle="tab" href="#graph" role="tab" aria-controls="profile" aria-selected="false">Cluster Schema</a>
+            </li>
+            <!--
+                <li class="nav-item">
+                    <a class="navbar-brand nav-link" id="query-tab" data-toggle="tab" href="#query" role="tab" aria-controls="contact" aria-selected="false">Query Panel</a>
+                </li>
+                -->
+        </ul>
+    </div>
+</nav>
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark" style="margin-top: 70px;"> 
+  <div class="container" id="refer">
+
+        <ul class="nav navbar-nav" id="myTab" role="tablist" >
+            <li class="nav-item">
+                <a class="navbar-brand nav-link " id="graph-tab" data-toggle="tab" href="#graph" role="tab" aria-controls="profile" aria-selected="false">Graph</a>
+            </li>
+            <li class="nav-item">
+                <a class="navbar-brand nav-link" id="treemapCS" data-toggle="tab" href="#treemap" role="tab" aria-controls="profile" aria-selected="false">TreeMapCS</a>
+            </li>
+            <li class="nav-item">
+                <a class="navbar-brand nav-link " id="sunCS" data-toggle="tab" href="#hierical" role="tab"
+                    aria-controls="profile" aria-selected="false">Sunburst
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="navbar-brand nav-link active" id="packCS"data-toggle="tab" href="#hierical" role="tab"
+                    aria-controls="profile" aria-selected="false">CirclePack
+                    <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <!--
+                <li class="nav-item">
+                    <a class="navbar-brand nav-link" id="query-tab" data-toggle="tab" href="#query" role="tab" aria-controls="contact" aria-selected="false">Query Panel</a>
+                </li>
+                -->
+        </ul>
+    </div>
+</nav>
+  <div class="row no-gutters">
+    <div class="col-lg-2 box" style="background-color: #e9ecef;
+                   position: fixed;
+                   top: 140px;
+                   bottom: 0px;
+                   padding-top: 70px;
+                   height: 100%;
+                   border-right: 10px solid rgba(0, 0, 0, 0.1);
+                   background-clip: padding-box;
+                   ">
+      <div class="header">
+        <div class="jumbotron jumbotron-fluid" style="padding: 10px 10px; margin: 0px">
+          <div class="row no-gutters">
+            <div class="col">
+              <p class="lead">From <span class="graph-title"></span></p>
+            </div>
+          </div>
+          <h2><button class="btn btn-secondary btn-info" id="goToSS">Create Schema Summary</button></h2>
+        </div>
+      </div>
+      <div class="container content">
+        <div class="tab-content" id="classes" role="tabpanel" aria-labelledby="graph-tab"></div>
+      </div>
+    </div>
+     <div id="chart" style="margin-top:70px"></div>
+  </div>
+{% end %}
+
+{% block additional_js %}
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="../js/circlepack.js"></script>
+{% end %}
+        
