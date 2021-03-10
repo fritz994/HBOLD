@@ -131,7 +131,7 @@ class SchemaSummary(tornado.web.RequestHandler):
         #https://stackoverflow.com/questions/17284286/disable-template-processing-in-tornadoweb
         #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
         print('Creato SS con id ',endpoint_id)
-        self.render('templates/ss.html')
+        self.render('ss.html')
 
 class HiericalSS(tornado.web.RequestHandler):
     def get(self,endpoint_id):
@@ -139,19 +139,16 @@ class HiericalSS(tornado.web.RequestHandler):
         #https://stackoverflow.com/questions/17284286/disable-template-processing-in-tornadoweb
         #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
         print('Creato SS con id ',endpoint_id)
-<<<<<<< HEAD
-        self.render('templates/sshier.html')
+        self.render('sshier.html')
+
 class TreemapCS(tornado.web.RequestHandler):
     def get(self,endpoint_id):
         self.set_header('Content-Type', '') # I have to set this header 
         #https://stackoverflow.com/questions/17284286/disable-template-processing-in-tornadoweb
         #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
         print('Creato SS con id ',endpoint_id)
-        self.render('templates/treemap.html')
+        self.render('treemap.html')
 
-=======
-        self.render('sshier.html')
->>>>>>> 7948ffb68be92aec2130f0d72db89051077cfb86
 
 # classe che viene chiamata quando si espande il cluster schema
 class ExploreSS(tornado.web.RequestHandler):
@@ -159,7 +156,7 @@ class ExploreSS(tornado.web.RequestHandler):
         self.set_header('Content-Type', '') # I have to set this header 
         #https://stackoverflow.com/questions/17284286/disable-template-processing-in-tornadoweb
         #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
-        self.render('templates/exploreSS.html')
+        self.render('exploreSS.html')
 
 class ClusterSchema(tornado.web.RequestHandler):
     def get(self,endpoint_id):
@@ -167,7 +164,7 @@ class ClusterSchema(tornado.web.RequestHandler):
         #https://stackoverflow.com/questions/17284286/disable-template-processing-in-tornadoweb
         #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
         print('Creato CS con id ',endpoint_id)
-        self.render('templates/cs.html')
+        self.render('cs.html')
 
 class TreemapCS(tornado.web.RequestHandler):
     def get(self,endpoint_id):
@@ -183,30 +180,22 @@ class SunburstCS(tornado.web.RequestHandler):
         #https://stackoverflow.com/questions/17284286/disable-template-processing-in-tornadoweb
         #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
         print('Creato CS con id ',endpoint_id)
-<<<<<<< HEAD
-        self.render('templates/sunburst.html')
-=======
         self.render('sunburst.html')
 
->>>>>>> 7948ffb68be92aec2130f0d72db89051077cfb86
 class CirclePackCS(tornado.web.RequestHandler):
     def get(self,endpoint_id):
         self.set_header('Content-Type', '') # I have to set this header 
         #https://stackoverflow.com/questions/17284286/disable-template-processing-in-tornadoweb
         #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
         print('Creato CS con id ',endpoint_id)
-<<<<<<< HEAD
-        self.render('templates/circlepack.html')
+        self.render('circlepack.html')
+
 class About(tornado.web.RequestHandler):
     def get(self):
         self.set_header('Content-Type', '') # I have to set this header 
         #https://stackoverflow.com/questions/17284286/disable-template-processing-in-tornadoweb
         #https://github.com/tornadoweb/tornado/blob/master/tornado/template.py
-        self.render('templates/about.html')
-=======
-        self.render('circlepack.html')
-
->>>>>>> 7948ffb68be92aec2130f0d72db89051077cfb86
+        self.render('about.html')
 
 # associata a ./index
 class IndexDatasetHandler(tornado.web.RequestHandler):
@@ -258,13 +247,13 @@ class IndexDatasetHandlerFull(tornado.web.RequestHandler):
 
 class GraphHandler(tornado.web.RequestHandler):
     def get(self, endpoint_id):
-        self.render('templates/insertDataset.html')
+        self.render('insertDataset.html')
 
 
 class InsertDataset(tornado.web.RequestHandler):
     def get(self):
         self.set_header('Content-Type', '')
-        self.render('templates/insertDataset.html')
+        self.render('insertDataset.html')
 
 
 class Inserting(tornado.web.RequestHandler):
